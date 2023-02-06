@@ -1,0 +1,30 @@
+[string]
+InstallerName=%1 Installatiewizard
+ProductName=EaseUS Data Recovery Wizard
+RecommendProductName=Mobimover
+InstallNow=Nu Installeren
+InstallRecommend=Installeer %1
+LicenseTps=%1 gelezen en ga er mee akkoord
+LicenseClick=EaseUS Licentie Overeenkomst
+CustomInstall=Aangepaste Installatie
+Languge=Taal
+InstallationPath =Installatiepad
+AgreeExperience=Ik wil deelnemen aan het klanttevredenheidsonderzoek
+Downloading=Downloaden...
+Installing =Installeren...
+DownloadFailed=Downloaden Mislukt
+CheckNet=Controleer de netwerkverbinding
+DownloadOffline=In Browser Downloaden
+Retry=Opnieuw Proberen
+StartNow=Nu Beginnen
+Later=Later
+StartNowTips=Wilt u het programma nu starten?
+InstallFailed=Installatie Mislukt
+InstallFailedTips=Download offline om het volledige installatiepakket te krijgen of start de pc opnieuw op om het opnieuw te proberen.
+Restart=Opnieuw Opstarten
+btn_Restartnow=Start nu opnieuw
+lb_RestartText=Weet u zeker dat u de pc nu opnieuw moet opstarten?
+lb_RestartTip=In de meeste gevallen worden programma's met succes opnieuw geïnstalleerd nadat de pc opnieuw is opgestart.
+
+FailedSolveSteps=Je kan ook het volgende proberen:
+RestartStep

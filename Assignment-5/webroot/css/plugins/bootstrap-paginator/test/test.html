@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bootstrap Paginator Tests</title>
+    <link rel="stylesheet" href="../css/qunit-1.11.0.css">
+    <link rel="stylesheet" href="../css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../lib/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="../lib/bootstrap.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="paginator-test"></div>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<div id='bp-3-element-test'></div>
+<span id='bp-2-element-test'></span>
+<script src="../src/bootstrap-paginator.js"></script>
+<script src="../lib/qunit-1.11.0.js"></script>
+
+<script type="text/javascript">
+
+
+
+    $(function(){
+
+        var container = $('#paginator-test');
+
+        var options = null;
+
+        //container.bootstrapPaginator(options);
+
+        module("getPages functionality test, 11 pages, maximum 3 pages visible",{
+            setup: function(){
+                 options = {
+                    containerClass:"pagination"
+                    , currentPage:1
+                    , numberOfPages: 3
+                    , totalPages:11
+                    , pageUrl:function(type,page){
+                        return null;
+                    }
+                    , onPageClicked:null
+                    , onPageChanged:null
+
+
+                };
+
+                container.bootstrapPaginator(options);
+            },
+            teardown: function(){
+                //container.bootstrapPaginator('destroy');
+            }
+        });
+
+
+
+        /**
+         *
+         * Tests the get page result. When the current page is 1 under the configuration, there will be no first and previous page,
+         * current page will be 1, next page will be 2, and last page will be 11. Second page within the pages item is 2.
+         *
+         * */
+        test("test getPage result,current page 1",function(){
+
+            var pages = container.bootstrapPaginator("getPages");
+
+            equal(pages.current,1,"Current page of initial setup is 1.")
+
+            equal(pages.first,1,"No first page in the initial setup")
+
+            equal(pages.prev, 1, "No previous page in the initial setup")
+
+            equal(pages.next, 2, "Next page of initial setup is 2")
+
+            equal(pages.last, 11, "Last page of initial setup is 11")
+
+            equal(pages[1],2,"page number 1's value must be 2");
+
+
+
+        })
+
+        /**
+         *
+         * Tests the get page result. When the current page is 2 under the configuration, first and previous page is 1,
+         * next is 3, last is 11, the 3rd page item is 3.
+         *
+         * */
+        test("test getPage result current page 2",function(){
+
+            options.currentPage = 2;
+
+            container.bootstrapPaginator(options);
+
+            var pages = container.bootstrapPaginator("getPages");
+
+            equal(pages.current,2,"Current page of initial setup is 2.")
+
+            equal(pages.first,1,"First page is one")
+
+            equal(pages.prev, 1, "Previous page is 1")
+
+            equal(pages.next, 3, "Next page of initial setup is 3")
+
+            equal(pages.last, 11, "Last page of initial setup is 11")
+
+            equal(pages[2],3,"page number 2's value must be 3");
+
+            equal(pages.length, 3, "Length of the pages is 3")
+
+
+        })
+
+        /**
+         * Tests the get page result, when the current page is 10, first is 1, previous is 9, next and last are 11.
+         *
+         * */
+        test("test gePage result with current page 10",function(){
+            options.currentPage = 10;
+
+            container.bootstrapPaginator(options);
+
+            var pages = container.bootstrapPaginator("getPages");
+
+            equal(pages.current,10,"Current page of initial setup is 10.")
+
+            equal(pages.first,1,"First page is 1")
+
+            equal(pages.prev, 9, "Previous page is 9")
+
+            equal(pages.next, 11, "Next page is 11")
+
+            equal(pages.last, 11, "Last page is 11")
+
+            equal(pages.length, 2, "Length of the pages is 2")
+        })
+
+        /**
+         * Tests the get page result, when the current page is 11, first is 1, previous is 10, no next and last item.
+         * the length of pages is 2.
+         *
+         * */
+        test("test get page result with current page 11",function(){
+            options.currentPage = 11;
+
+            container.bootstrapPaginator(options);
+
+            var pages = container.bootstrapPaginator("getPages");
+
+            equal(pages.current,11,"Current page of initial setup is 11.")
+
+            equal(pages.first,1,"First page is 1")
+
+            equal(pages.prev, 10, "Previous page is 10")
+
+            equal(pages.next, 11, "No next page")
+
+            equal(pages.last, 11, "No last page")
+
+            equal(pages.length, 2, "Length of the pages is 2")
+        })
+
+        /**
+         * Tests the functionality of getValueFromOption. this function is how the program turn the function attribute into
+         * value when deciding it.
+         *
+         *
+         * */
+        module("getValueFromOption functionality test",{
+
+            setup: function(){
+                container.bootstrapPaginator('destroy');
+
+                options = {
+                    containerClass:"pagination"
+                    , currentPage:1
+                    , numberOfPages: 3
+                    , totalPages:11
+                    , pageUrl:function(type,page){
+                        return null;
+                    }
+                    , onPageClicked:null
+                    , onPageChanged:null
+
+
+                };
+
+                container.bootstrapPaginator(options);
+            }
+        })
+
+        /**
+         * Tests both a string parameter and a function parameter, string parameter should return the orignial string,
+         * while function one must give the return value of that function.
+         * */
+        test("test the functionality of the getValueFromOption",function(){
+
+            var result = container.bootstrapPaginator("getValueFromOption","a")
+
+            equal(result,"a","value from the option function is a");
+
+            var result = container.bootstrapPaginator("getValueFromOption",function(a){
+
+                return a+1;
+
+            },1010)
+
+            equal(result,1011,"value from the option function is 1010");
+
+        })
+
+        /**
+         * Tests the buildPageItem function. the function builds individual page item by providing only the
+         * */
+        module("buildPageItem functionality test",{
+
+            setup: function(){
+                container.bootstrapPaginator('destroy');
+
+                options = {
+                    containerClass:"pagination"
+                    , currentPage:2
+                    , numberOfPages: 3
+                    , totalPages:11
+                    , pageUrl:function(type,page){
+                        return null;
+                    }
+                    , onPageClicked:null
+                    , onPageChanged:null
+
+
+                };
+
+                container.bootstrapPaginator(options);
+            }
+
+        })
+
+        /**
+         *
+         * Renders different types of pages. and check the html node and text within it.
+         *
+         * */
+        test("test individual page item rendering ", function(){
+
+            var pages = container.bootstrapPaginator("getPages");
+
+            var first = container.bootstrapPaginator("buildPageItem","first",pages.first),
+                prev = container.bootstrapPaginator("buildPageItem","prev",pages.prev),
+                next = container.bootstrapPaginator("buildPageItem","next",pages.next),
+                last = container.bootstrapPaginator("buildPageItem","last",pages.last),
+                current = container.bootstrapPaginator("buildPageItem","page",pages.current);
+
+            ok(first.is("li"),"check whether the wrapping element is a li");
+
+            var childOfFirst = first.children();
+
+            equal(childOfFirst.length,1,"length of the children is 1");
+
+            ok(childOfFirst.first().is("a"),"check whether the content container is a");
+
+            equal(childOfFirst.first().text(),"<<","text of first item is <<");
+
+            ok(prev.is("li"),"check whether the wrapping element of prev is a li");
+
+            var childOfPrev = prev.children();
+
+            equal(childOfPrev.length,1,"length of the previous children is 1");
+
+            ok(childOfPrev.first().is("a"),"check whether the previous content container is a");
+
+            equal(childOfPrev.first().text(),"<","text of previous item is <");
+
+            var childOfCurrent = current.children();
+
+            equal(childOfCurrent.length,1,"length of the current children is 1");
+
+            ok(childOfCurrent.first().is("a"),"check whether the current content container is a");
+
+            equal(childOfCurrent.first().text(),"2","text of current item is 2");
+
+            var childOfNext = next.children();
+
+            equal(childOfNext.length,1,"length of the next children is 1");
+
+            ok(childOfNext.first().is("a"),"check whether the next content container is a");
+
+            equal(childOfNext.first().text(),">","text of next item is >");
+
+            var childOfLast = last.children();
+
+            equal(childOfLast.length,1,"length of the last children is 1");
+
+            ok(childOfLast.first().is("a"),"check whether the last content container is a");
+
+            equal(childOfLast.first().text(),">>","text of last item is >>");
+
+        })
+
+        /**
+         * Test the functionality of render function. The test will go for those boundary pages.
+         *
+         * Test cases are: 1, 2, 10, 11
+         *
+         * */
+        module("render functionality test",{
+
+            setup: function(){
+                container.bootstrapPaginator('destroy');
+
+            }
+
+        })
+
+        /**
+         * Test case 1, there will be 5 items, 1,2,3 and >, >>
+         * */
+        test("test rendering for page = 1",function(){
+
+            options = {
+                containerClass:"pagination"
+                , currentPage:1
+                , numberOfPages: 3
+                , totalPages:11
+                , pageUrl:function(type,page){
+                    return null;
+                }
+                , onPageClicked:null
+                , onPageChanged:null
+
+
+            };
+
+            container.bootstrapPaginator(options);
+
+            var containerChildren = container.children();
+
+            equal(containerChildren.length,1,"must be only 1 element in the container");
+
+            var outerContainer = $(containerChildren[0])
+
+            ok(outerContainer.is("ul"),"outer container element is ul");
+
+            var pageItems = outerContainer.children();
+
+            equal(pageItems.length,5,"page items in this case is 3 page items plus next and last");
+
+            equal($($(pageItems[0]).children()[0]).text(),'1',"first page is 1, no previous and first");
+
+            ok($(pageItems[0]).hasClass("active"),"first page 1 is an active page");
+
+            equal($($(pageItems[1]).children()[0]).text(),'2',"second item is 2");
+
+            equal($($(pageItems[2]).children()[0]).text(),'3',"third item is 3");
+
+            equal($($(pageItems[3]).children()[0]).text(),">","fourth item is next");
+
+            equal($($(pageItems[4]).children()[0]).text(),">>","fifth item is last");
+
+        })
+
+        /**
+         * Test case 2, there will be 7 items, <<, <, 1, 2, 3 and >, >>
+         * */
+        test("test rendering for page = 2", function(){
+
+            container.bootstrapPaginator("destroy");
+
+            options = {
+                containerClass:"pagination"
+                , currentPage:2
+                , numberOfPages: 3
+                , totalPages:11
+                , pageUrl:function(type,page){
+                    return null;
+                }
+                , onPageClicked:null
+                , onPageChanged:null
+
+
+            };
+
+            container.bootstrapPaginator(options);
+
+            var containerChildren = container.children();
+
+            equal(containerChildren.length,1,"must be only 1 element in the container");
+
+            var outerContainer = $(containerChildren[0])
+
+            ok(outerContainer.is("ul"),"outer container element is ul");
+
+            var pageItems = outerContainer.children();
+
+            equal(pageItems.length,7,"page items in this case is first, previous, 3 page items plus next and last");
+
+            equal($($(pageItems[0]).children()[0]).text(),'<<',"first item is first page with text <<");
+
+            equal($($(pageItems[1]).children()[0]).text(),'<',"second item is previous page wiht text <");
+
+            equal($($(pageItems[2]).children()[0]).text(),'1',"third page item is 1");
+
+            equal($($(pageItems[3]).children()[0]).text(),'2',"fourth page item is 2");
+
+            ok($(pageItems[3]).hasClass("active"),"fourth page item is an active page");
+
+            equal($($(pageItems[4]).children()[0]).text(),'3',"fifth page item is 3");
+
+            equal($($(pageItems[5]).children()[0]).text(),">","sixth item is next");
+
+            equal($($(pageItems[6]).children()[0]).text(),">>","seventh item is last");
+
+        })
+
+        /**
+         * Test case 10, there will be 6 items, <<, <, 10, 11, >, >>
+         * */
+        test("test rendering for page = 10", function(){
+
+            container.bootstrapPaginator("destroy");
+
+            options = {
+                containerClass:"pagination"
+                , currentPage:10
+                , numberOfPages: 3
+                , totalPages:11
+                , pageUrl:function(type,page){
+                    return null;
+                }
+                , onPageClicked:null
+                , onPageChanged:null
+
+
+            };
+
+            container.bootstrapPaginator(options);
+
+            var containerChildren = container.children();
+
+            equal(containerChildren.length,1,"must be only 1 element in the container");
+
+            var outerContainer = $(containerChildren[0])
+
+            ok(outerContainer.is("ul"),"outer container element is ul");
+
+            var pageItems = outerContainer.children();
+
+            equal(pageItems.length,6,"page items in this case is first, previous, 3 page items plus next and last");
+
+            equal($($(pageItems[0]).children()[0]).text(),'<<',"first item is first page with text <<");
+
+            equal($($(pageItems[1]).children()[0]).text(),'<',"second item is previous page wiht text <");
+
+            equal($($(pageItems[2]).children()[0]).text(),'10',"third page item is 10");
+
+            ok($(pageItems[2]).hasClass("active"),"fourth page item is an active page");
+
+            equal($($(pageItems[3]).children()[0]).text(),'11',"fourth page item is 11");
+
+            equal($($(pageItems[4]).children()[0]).text(),">","fifth item is next");
+
+            equal($($(pageItems[5]).children()[0]).text(),">>","sixth item is last");
+
+        })
+
+        /**
+         * Test case 11, there will be 4 items, <<, <, 10, 11
+         * */
+        test("test rendering for page = 11",function(){
+
+            options = {
+                containerClass:"pagination"
+                , currentPage:11
+                , numberOfPages: 3
+                , totalPages:11
+                , pageUrl:function(type,page){
+                    return null;
+                }
+                , onPageClicked:null
+                , onPageChanged:null
+
+
+            };
+
+            container.bootstrapPaginator(options);
+
+            var containerChildren = container.children();
+
+            equal(containerChildren.length,1,"must be only 1 element in the container");
+
+            var outerContainer = $(containerChildren[0])
+
+            ok(outerContainer.is("ul"),"outer container element is ul");
+
+            var pageItems = outerContainer.children();
+
+            equal(pageItems.length,4,"page items in this case is first, previous, 3 page items plus next and last");
+
+            equal($($(pageItems[0]).children()[0]).text(),'<<',"first item is first page with text <<");
+
+            equal($($(pageItems[1]).children()[0]).text(),'<',"second item is previous page wiht text <");
+
+            equal($($(pageItems[2]).children()[0]).text(),'10',"third page item is 10");
+
+            equal($($(pag   	      H  –   
+
+     à  Ş       p  ¾       h  .         –       ˆ	  ¦         ¨  .  ((     h  Ö-  00     ¨%  >H  (                                    ÿÿ     ÎÅL9ËÅO’ËÄP’ÑÈM8    ÿÿ     ÍÆRpÓËSâÊÅP\ËÃQ^ÓÌSâÍÆPp    ÎÃODÌÄQéÊÂP‚        ËÃP€ÍÅQéÎÃODËÅP¦ËÄQqÊÄOtÆ¸GËÄOJÌÄP}ÍÄMpËÅQ¦ÍÅR¬Å½JËÆP²ªª9	ÎÇQ‘ÌÅRÔÂ¶=ÍÇQ­ÏÇR¾    ÏÈQtÍÆRp    ÃÃK    ÍÆP¼ËÅP™ÎÆQÊÂPCÑÊSáĞÉR’ÍÄO=ÍÅQ…ËÆQ˜¶¶$ÌÆQxÑÊR•ÏÈOJÎÉPYÓÊS–ÌÆQx¶¶I                                (   
+                                             ÌÇR2ÉÁP€ÉÁP€ÌÂR2                   ×ÍT…ÕÎUãÉÂP–ÉÂP–ÔÎUã×ÍT…           ÉÄP’äÛ[ÿÏÇQe        ĞÈPfäÜ[ÿÉÄP’    ÍÇPVËÅPÀÇ¿N»Å¿K,        ÍÁK)ÈÀO»ÌÄP¿ÍÇPVÌÅRÇĞÈPFËÃP¦ËÇN;¼¼CËÄPcÊÃNHÍÅQ£ÍÆOGÌÅRÇÍÅRÛªª9	ÍÄPËÃR€ÌÌ ÍÅP¢ÎÆRùËÅP€¿ª+ÍÆPÛĞÉRÓ€ª+ÌÆO-ÑÉSØ¿¶I    ÊÄOWÆ¿G$¶¶$ĞÉRÓËÄQ×ÍÃQL    ÏÄRdÑÉRÃËËS"        ÉÅNKËÄO×ÊÃOMÎÇRÑËÄOŠÉÂOÑËSàĞÈRÈÊÃP–ËÄQŠÎÇSÑÍÆML    ÊÅP0ÌÄO‡ÌÃP|Ç¿H ËÄN'ÉÃQ{ÌÄO‡ÏÅP0                                            (                                            ÿÿ         ÂÂGËÃODËÃODÂ¸G        ÿÿ             €€     ·§@ ÖÎSˆÌÇQèÊÄPèÊÄPèÍÇRçÕĞS‡²ª>!    €€     ÿÿ     Æ½L6×ĞWÎß×YÿÏÊSÂ¼N.Â¼N.ÑÊSß×Xÿ×ĞUÎÆ½L6    ÿÿ     ÌÆF(ËÆPŞãÚ[ÿËÅP¢                ÍÅP¢ãÚ[ÿËÄRŞÌ¿F(    ¿Ÿ ËÂOµËÄQÒÈÁOÕÉÂPmÿÿ ¶¶$ÆÆ	ÿ€ ÉÂPmÈÁOÕÌÄQÑËÄOµ¿Ÿ ÎÈRTĞÉSãÇºN;ËÃQÉÊÂNi                ÌÅNiÍÄPÈÊ½K:ĞÉSãÎÈRTÊÄQÂÊÅP¬    ÌÅQÒËÅN    ÏÁL%ÉÃQ¦Á°>ËÂPvÌÅQÔ    ÊÅP¬ÊÄQÂÊÃPöÉÂOq    ËÄP¨ÊÄP½    ÁÁFÌÅQÇÎÆRéÌÆQòÊÂO›    ËÂPpËÅPõÓÌTôÈÂOT    Ã¿MLÎÆSóËÂN;        ĞÉQrÑÊTØÆÃJH    ËÅPSÓÌSôÎÈR÷ÈÀM]ÿÿU™™3ÒËT°ÑÉSÔ»»D        Æ¸GÏ¿@ÿÿUËÃM]ÎÇR÷ËÄQÏÎÅQ«        ½­BÒÉSÊÎÈQ§¼¼C                ÍÅP¬ÊÄPÏÉÂOGÎÇS÷ÑÈRŒÂ¼I*ÎÎRËÂP“çà\ÿÒÌTÕËÆQkÎÂO*ÄÄH'ĞÇQÎÈS÷ÌÅLF    ÎÅQXÎÇRàÊÂPæÊÂOçÌÅQÜĞÈR}ÎÉQÍÆRäÊÄQäËÃQæÍÇRáÎÅQX           ÅÅFÌÅPFÉÂOGÈÈI        ÎÄNÉÂOGÌÅPFÅÅF                                                               (                                                 €€         Ì³3
+ËÄN'ËÄN'Ì³3
+        €€                     ÿÿ     Ç¿H ËÆQŠÌÅRàËÄQúËÄQúÌÅRàÍÅR‰Ç¿H     ÿÿ             €€     ÊÁQRĞÈSäİÕYÿËÄQ¾ÉÄQ_ÉÄQ_ËÄR¾İÕYÿÏÈSäÊÁNR    €€     €€     ÉÃOZÎÇSşØÑWÿÊÃQ§                ÊÄP¨ØÑWÿÎÇSşÉÁOZ    €€     È¾K3ËÅR÷ÎÆRèÌÅRöÊÀM5    ÌÌ3ÌÌ3    ËÂP6ÌÅRöÎÆRèËÅR÷È¾K3    ªª ËÄQÆËÄPÎÉÂQ…ËÄQë¿¿P       ÿÿ ÿÿ Ï¿PËÄQìËÃO„ËÄPÎËÄQÆªª ÉÅRKÓÌUÿÌÄQ<ÊÁPoËÄQğ¿¿@                Õ¿@ÌÅRğÌÃQnÌÄQ<ÓÌUÿÉÅRKËÄR´ÊÄQİ    ËÃQ^ÌÅRüÈÈL%    ÉÃJ&ËÄR»ÊÁN>Ä»MÍÆRıËÃO^    ÊÄQİËÄR´ÊÃQöÊÂQš    Ë¿Q,ÍÆRÿÉÂOd    ÈÁL%ÍÆRÑÎÆSÿÎÆRÊËÄQõÍÂN.    ÊÂQšËÅQõÓÌUÿÊÃPs    €€ ÉÃQÇÌÅRÍ ÿ     ªª ÍÆPpĞÉTüÊÃQ¿ªª     ÌÃPsÓÌTÿÒËTÿÉÄQuÿÿ     ËÄPI×ĞVÿÈÁPf    ªª     Æ»O-ÏÅP0    ÿÿ ÍÆQuÒËTÿËÄQëËÃQª    ™™3   ÊÃP¥ÒÊTşÂ¾M?    ¿¿         ¿¿@    ËÂQ«ÊÃQëËÃQ„ÏÈSıÇ¾O7            ÏÆS¹ÓÍUîËÆPY                Ä¿M8ÏÉSıÊÅPƒ¿¿@ÍÅRÊÑÊSøÌÄR}ÉÃOQÌÄQhÌÄQÌÖÏVÿÓÌUÿËÅQÆËÄPlÌÂPPÊÄQ~ÑÊTøÍÅRÊÌÌD    È¼NÍÇRŸËÅRòÊÃQûËÄQ÷ÎÆRÄÉÃOQÊÄNRÎÇSÅËÄQöÊÃQûÌÅRòÍÇRŸÈ¼N               Ê¿JÊÅP0ÊÁO                ÊÁOÊÅP0Ê¿J                                                                           (      ,                                                  ÿÿ ÿÿ             €€ €€             ÿÿ ÿÿ                                     ÿÿ         ÊÁOÌÄRdÊÄQ›ÊÃP¸ÊÃP¸ÊÄQ›ÌÄRdÈ¿R        ÿÿ                             ÿ      ÄÄNÊÃP|ËÃRáÓËUÿÜÔXÿÏÈSÿÏÈSÿÜÔXÿÓËTÿËÄRàÉÃQ{ÄÄN    ÿ                      €€     ÇÁQ)ÊÃQÀÑÊTÿÒËUÿÊÃQâÌÅOwÊÅR>ÊÅR>ÌÅOwËÄQâÓËUÿÑÊTÿËÄQ¿ÇÁK)    €€                    ÍÂN.ÍÇSÕÒÊTÿÎÇSüËÄRŞÊÅM5                ÊÅM5ËÄRŞÏÇSıÒÊTÿÍÆQÕÌÆO-                  ÄÄNËÄPÎÕÍVÿÊÃQúÏÈRşÌÂSi    ÿÿ ªªUªªUÿÿ     ÈÃQkÏÈRşËÄRùÕÍVÿÊÄPÎÄÄN           ÿÿ ÉÂO¤×ĞVÿÊÂQÊÊÄQìÊÃQêÌÄMÿÿ ÿÿ         ÿÿ ÿÿ ÅÅJÊÂPëÊÄQìÊÂQÊ×ĞVÿÉÂO¤ÿÿ         ËÅQOÓÌUüËÃQÖÌÂPPËÄQòÊÄRËÌ™3            €€         ÌÌ3ËÄQÌËÄQòÉÂPPÌÃQÖÓÌUüËÅQO    ÆÆU	ÊÂP¼ÙÑWÿÊÄN[Ä¾H'ÍÆSÿËÄQ¿                           ÿ  ËÃQÀÍÆSÿÉÃJ&ÊÄN[ÙÑWÿÊÂP¼ÆªU	ËÃSDÏÈSùÊÃQÓÌ³3
+Ë¾N'ËÃQøÊÄPÏ¿¿@            ËÃK"¿¿@    Ì³M
+ËÄQÏËÃQøÉÃQ&ÌÌ3
+ÊÃQÓÏÈSùÊÆTCÊÃQ”×ĞVÿËÃP    È¼NÊÃPŞÊÃQïÉÁM!        ËÂP6ÊÃRçÍÅR§ÇÇP ĞÆLËÄRğÊÄQİÈ¼N    ËÃP×ĞVÿÊÃQ”ËÄQÓÎÇRüÈÀNA    ªª ÊÃQ®ÖÏVÿÌÃQU        ÈÄNAËÄQåİÕYÿËÄPÛËÄQ£ÒËSşËÅR¯ªª     ÈÀNAÎÇRüËÅQÒËÄQöÊÃQêÎÅJ        ËÃPfØÑWÿÉÂQ«€€ ÿÿ     ÎÅRÊÃR™ËÄRÿÖÏVÿĞÉSÿÎÄQh        ÎÅJËÃQêËÄQöÎÇRÿËÄQÜÌ¿M        Æ½LÌÅRßĞÉTöÆÂM?    ªª         ËÄOJÌÄRĞÊÂRŞĞ½L        ÂÂIËÃQİÍÆRÿÌÅRúÊÃQåÎÄN    €€     ËÅPvØÒWÿÌÄR¾ÄÄN    ªª         Ê¿JÌÃO7            Æ½LËÃQåÌÅRúËÃQİÍÆSúÉÀQ9ÿÿ ÿÿ    Ï¿@ÉÂPÆÙÑXÿÈÁP        €€ €€             ÿÿ ÿÿ ÊÁO:ÌÅRûËÄQÜÉÃQ˜ØĞVÿÈÂOŠ    ÿÿ ¿¿@ÿÿ ÉÅQ9ÌÆRèÑÊTÿÊÄQ‡ÌÌ3       ¿¿@ÌÌ3ªªU€€     ÉÂOŠØĞVÿËÄQ—ÆÂP6ÍÆRïÍÇSñÇÀMI                É¾OGÎÆSîÎÈSÿÊÄP¨ÈÂO*                    ËÀPIÍÆRòÍÅRïÊÀM5    ÊÃP|×ĞWÿÍÆQîÊÄP‚ÊÂM?ÊÀR5ÉÂPPËÄPËÄQòÒËUÿÙÒWÿËÄQìËÂP“ÈÅQOÊÀR5ÊÂM?ÊÄP‚ÍÆSî×ÏWÿËÃQ{       ÌÌ3ÈÃPƒÌÅRùÜÔXÿÏÈSÿËÄQşÕÎUÿÜÔXÿËÄRòËÄP’ÌÅQËÄRóÜÓXÿÕÎUÿËÄQşÏÈSÿÜÔXÿÌÅQùÈÃPƒÌÌ3               ÉÅL9ËÄOŠËÃQ¶ÊÃQÀÊÄP¨ÊÁQtÆÁO-        ËÅQ,ÊÁOtÊÄP¨ÊÃQÀËÃQ¶ËÄOŠÉÅL9                               ÿÿ ªª+                              ªª+ÿÿ                                                                                                            (      0                                                          €€                                 €€                                                 ÿÿ         ÎÄNÊÁPVÉÄQ…ÉÃPÉÃPÉÄQ…ÊÁPVÄºN        ÿÿ                                     ÿÿ     ¿¿MÌÅP|ÌÅQÖËÄRÿÚÓWÿÚÒWÿÚÒWÿÚÓWÿËÄRÿËÃQÖËÅQ{¿¿M    ÿÿ                             ÿÿ     ÊÁN>ÌÅQÉÏÈSÿÔÌUÿÊÄQ÷ËÄP°ÊÄR}ÊÄR}ËÄQ°ËÄQ÷ÔÌUÿÏÇSÿÌÆRÈÍÄK=    ÿ                      ÿÿ     ÍÄNRÍÆRéĞÉSÿÎÇSıÌÄRäÈÅOT                ÉÃNUÌÅRäÎÇSıĞÉSÿÎÆRèÊÁNR    ÿÿ                    ÌÂNKËÄRğÏÈSÿËÄQûÌÅRüÈÃOa    ÿÿ ÿÿ ÿÿ ÿÿ     ÈÃNbÌÅRüÊÄQûÏÈSÿÌÄRïËÁOJ                   ÈÂO*ÌÅRİÏÈSÿËÄQîÒÊTÿËÃPÅÕ¿@€€ ÿÿ         ÿÿ €€ ÕÕ@ÊÄQÆÑÊTÿËÄSîÏÈSÿÌÅRİÈÂO*            Æª9	ÈÃP­ÚÒXÿËÃPºÊÄQ­ØÑWşÊÃPŒ    ÿÿ                 ÿ      ËÃQØĞWşËÅP¬ËÃPºÚÒXÿÈÃP­Æª9	        ÌÃQUÑÉTúÎÇSíÌÃO7ÌÄRŸÚÓWşÌÅRm    ÿÿ         ÿÿ ÿÿ ÿ€     ÊÆPoÚÓXşÌÄPŸÌÃO7ÎÇSíÑÉTúÌÃQU    Ì³M
+ÊÃQ·ÚÒWÿÊÂP    ËÄQ°×ÏVÿËÃQk    ªª                 ¿¿@    ËÂPl×ÏVÿËÄQ°    ÊÂPÚÒWÿÊÃQ·Ì³M
+ÊÂLCÌÆSôËÄQîÈÂN.    ÉÂP ÙÓWşÊÂO~    €€         ÊÅR5É¼C        ËÃRÛÒWşÊÂRŸ    ÈÂN.ËÃQîËÄRõÉÁMBËÂQ×ĞVÿÌÄQ©€€     ÍÄRzÚÒXÿÊÄP¥€€         ÌÄQ<ËÃQîÊÄPÂÊÆQ?    ËÃP¦ÙÒXÿËÄOz    €€ ÌÄQ©×ĞVÿËÂQËÃQÉÖÏUşÉÂPm        ËÄPIĞÉTıÊÃQÚÆ½L        ÇÃOMÊÃRêÚÒXÿÌÅQîËÃP™ËÄQÜĞÉSıËÄPI        ÉÂPmÖÏUşËÄRÈÊÃQïÌÄQüËÄNE        ¿¿MÉÂQÖÓÌTşÍÄQ[           ÆÁO-ÌÄR¤ÌÅRÿÕÎVÿÏÈSÿÊÃQ×Ì³M        ËÄNEÌÅQüËÄQîËÄQşËÄQòÉÄN4    ÿÿ     ËÃQ„ÙÒXÿËÃQ¿Õ¿U          ¿¿@ÉÀPYÊÄQĞØĞVÿÊÂR†    ÿÿ     ÊÅM5ËÄQòÊÃPşËÄQüÊÃQõÇÃO7    ÿÿ     ÌÆS(ÊÄRäÑÊSÿËÃQk    €€ ÿÿ         ÊÁOÎÅP|Æ¿M(    €€     ÌÃO7ÊÄQõÊÄQüËÄRæÎÇRşÎÄRN    ÿÿ ÿÿ     ÊÄQxÓÌTÿÌÅQåÈ¿M8    ÿÿ ÿÿ ÿÿ                        ËÅQOÎÇRşËÄRæÌÅQ³ØĞVÿÊÃPŒ    ÿÿ        Ä±NÉÂQ·ÚÒWÿÌÄRÑÆÁO-    ÿÿ €€    €€         ÿÿ     ÊÅPŒØĞVÿÍÄR²ÊÅQaÏÈSüÌÅSáÎÂO*    €€ ªª     ÍÇQ)ÌÄRÈÓËUÿÌÄQÓÌÀNA        ÿÿ ÿÿ ÿÿ €€     ÎÂO*ÍÅSáÏÈSüÊÂP`Ì»UÊÄQ½ØÑWÿËÄQ¿ÌÁO-                ÊÄPVËÃQóĞÉTÿËÄRíÊÂP‚ÈÁS%                ÌÁO-ÊÃQÀÙÑWÿËÃQ¼»»D    ÌÃO7ÍÆRßØÑVÿËÃQãËÃQ˜ËÄQqÌÄQxÊÄQ¤ËÃQİÎÇSÿËÄRıÍÆRÿ×ĞVÿËÄRáËÄP£ÌÄQxËÄQqËÄQ˜ÊÃQäØÑWÿÍÆRßÌÇO7    ÿÿ     ÆÁO:ËÄQ¿ÎÇRÿÛÔXÿÚÒWÿÙÒWÿÚÓWÿÍÅRÿËÄPËÈÃOaÊÂP`ËÄPÈËÄRÿÚÒWÿÙÒWÿÚÒWÿÛÔXÿÎÇRÿËÄQ¿ÆÁO:    ÿÿ             ÄÄNÈÂOTÌÄQ‹ÊÂO¤ÊÄRŸËÅPÉÂRKÌ»D        Ì»DÉÂRKËÅPÊÄRŸÊÂO¤ÌÄQ‹ÈÂOTÄÄN                    ÿÿ                                 €€ €€                                 ÿÿ                                                                                                         (       @                                                                                                                                                                                                              ÌÌfÎÄNÉÄS4ÊÂTCÊÂTCÉÄS4ÎÄNÌÌf                                                                                        ÈÈNËÃQ^ËÅSªÌÅRÚËÄRğËÄR÷ËÄR÷ËÄRğÌÅRÚËÅSªËÃR]ÈÈN                                                                        ÈÈ[ÊÅQeËÄRÎËÄRûËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRûËÅRÍÌÄRdÈÈ[                                                            ËÅQ,ËÅR¯ËÄRúËÄRÿËÄRÿËÄRÿËÄQñËÄRÄËÅR¢ËÅR¢ËÄRÄËÄQñËÄRÿËÄRÿËÄRÿËÄRùÌÄR®ËÅQ,                                                    ÌÅTFËÃRÖËÄRÿËÄRÿËÄRÿËÄRşËÄQ¹ÍÅQBÄÄNÿÿ ÿÿ ÄÄNÊÂTCËÄRºËÄRşËÄRÿËÄRÿËÄRÿÌÄQÕËÄQE                                            ÍÃQLËÄRâËÄRÿËÄRÿËÄRÿËÄRÿËÄS­ÈÈN                        ÈÈNÌÄR®ËÄRÿËÄRÿËÄRÿËÄRÿËÄRâÍÃQL                                    ÊÂQ?ËÄRàËÄRÿËÄRÿËÄRÿËÄRÿËÄRÜÈÂU*                                ÊÄS+ËÄRİËÄRÿËÄRÿËÄRÿËÄRÿÌÄRßÊÅR>                            ËÃS"ËÄRËËÄRÿËÄRşËÄRûËÄRÿËÄRÿÌÄR†                                        ËÅSˆËÄRÿËÄRÿËÄRûËÄRşËÄRÿËÄRËËÃS"                    ¿¿`ËÅQËÄRÿËÄRÿËÄRËËÄSÏËÄRÿËÄRôÌÄRA                                        ÊÂTCËÄRõËÄRÿËÄSÏËÄRËËÄRÿËÄRÿËÅQ¿¿`                ËÅRTËÄRôËÄRÿÌÄRäÍÃQLËÃRÉËÄRÿËÄRàÎÅR                                        ÇÇP ËÄRáËÄRÿËÄRÈÍÃQLÌÄRäËÄRÿËÄRôËÅRT            ÆÆUËÄRÁËÄRÿËÄRıÊÄQtÊ¿UËÄRÙËÄRÿÌÄRĞÆÆU                                        ÉÉQËÄSÒËÄRÿËÄRÙÊ¿UÊÄQtËÄRıËÄRÿËÄRÁÆÆU        ÌÃRZËÄRúËÄRÿËÃRÅÉÉQÌÂRËÄRÛËÄRÿËÄRÎÒÃK                                        ÒÃKËÄSÏËÄRÿËÄRÛÊ¿UÉÉQËÃRÅËÄRÿËÄRúÌÃRZ    ÌÌM
+ËÄR±ËÄRÿËÄRûÊÅQa    Ì¿MËÄRÓËÄRÿËÄQØÊ¿U                    ÿÿ€ÿÿ             ÌÂRËÄRÙËÄRÿËÄSÒÉÉQ    ÊÅQaËÄRûËÄRÿËÄR±ÆÆU	ÌÃS7ÊÄRéËÄRÿËÄSÒÌÂR    ÆÆU	ËÄR¾ËÄRÿËÄRêËÅQ,                ¿¿`ÊÄS~ÌÅQnÌÌU        ÌÆO-ËÄRëËÄRÿËÄR¾ÆÆU	    ÌÂRËÄSÒËÄRÿËÄRèÌÃS7ÌÄSxËÄRıËÄRÿËÄS            ÌÃSšËÄRÿËÄRûËÅSS                ÌÃQUËÄRõËÄRûËÄR·ÍÄT=    ÌÃQUËÄRûËÄRÿËÅR™            ËÄSËÄRÿËÄRıÌÄSxËÄR´ËÄRÿËÄRúÉÃRQ            ËÃSfËÄRÿËÄRÿÌÅQ                ÊÄRyËÄRùËÄRÿËÄRÿËÄRêËÃQ„ËÄQ£ËÄRÿËÄRÿÊÅQe            ÉÃRQËÄRúËÄRÿÊÅS³ËÄRİËÄRÿËÄRèÈÂU*            ÍÂS.ÊÄRéËÄRÿËÄRÓÌÂR            ÌÌM
+ËÃR]ËÄSÒËÄRşËÄRÿËÄRıËÄRûËÄRÿÊÄRéÍÂS.            ÈÂU*ËÄRèËÄRÿËÄRÜËÄRôËÄRÿÌÄQÕÑÅQ            ¿¿`ËÄS°ËÄRÿËÄRûÊÅQa                    ÇÇP ËÄRËÄSîËÄRÿËÄRÿËÄRÿËÄS°Û¶I            ÑÅQÌÄQÕËÄRÿËÄRôËÄRşËÄRÿËÄRÊÈÈ[                ËÃSYËÄRùËÄRÿËÃRÅÎÂU                    ¿¿@ËÄQEËÄR¾ËÄRüËÄRùËÃSY                ÌÌUËÄRÊËÄRÿËÄRıËÄRüËÄRÿËÄSÌÏ¿P                ÆÆUËÅRÀËÄRÿËÄRüËÄSu                            ÉÉQÌÃQwËÃRÆÆU                Ï¿PËÅRÍËÄRÿËÄRüËÄSîËÄRÿËÄRÜÆÆU                    ËÅSSËÄRôËÄRÿÌÄRäËÂR;                            ÿÿ€Û¶I                    ÈÈRËÄRÜËÄRÿËÄSîËÄRÎËÄRÿËÄRòËÂR;                    ¿¿`ËÅQËÄRÿËÄRÿËÃRÅËÃS"                                                    ÌÄQ<ËÄRòËÄRÿËÅRÍËÄS”ËÄRÿËÄRÿÊÄS~                        ÌÅP#ËÄSÌËÄRÿËÄRÿËÄR´ÌÄU                                                ËÅRËÄRÿËÄRÿËÄR“ÍÆSGËÄRïËÄRÿËÃRÖÌÅP#                        ËÃT@ËÄRáËÄRÿËÄRÿËÅQ¼ÌÆO-                                        ÍÆU$ËÃRÖËÄRÿËÄRïÌÅTFÑ¹]ËÄS­ËÄRÿËÄRÿËÄQ£ÆÆU                        ÌÅRKÌÄRäËÄRÿËÄRÿËÄQØËÃR]Ñ¹]                            ÆÆUÌÄR¤ËÄRÿËÄRÿËÄR¬ÌÌM
+    ÌÄQ<ËÄRæËÄRÿËÄRüËÅR¯ÉÅQ9ÆÆU	        ¿¿@ÌÂRÌÃQUÌÄQÕËÄRÿËÄRÿËÄRÿËÄR÷ËÄR´ËÅRTÌÂR¿¿@        ÆÆU	ÉÅQ9ËÄS°ËÄRüËÄRÿËÄRæËÂR;        ÿÿ ÌÄRdËÄRğËÄRÿËÄRÿËÄRìËÅQ¼ËÅR™ÌÅR•ÌÄR®ËÄR×ËÄRùËÄRÿËÄRÿËÄRûËÄRûËÄRÿËÄRÿËÄRùËÄR×ÌÄR®ÌÅR•ËÅR™ËÅQ¼ËÄRíËÄRÿËÄRÿËÄRğÌÄRdÿÿ             ªªUÊÄQ[ËÄRÜËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRüËÄRÑËÃQkËÃQkËÄRÑËÄRüËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÿËÄRÜÊÄQ[ªªU                        ÌÆS(ÊÄQ‡ÌÄRĞËÄRïËÄRùËÄRúËÄRóËÄRŞËÄS°ÌÄRdÎÄN        ÎÄNÌÄRdËÄS°ËÄRŞËÄRóËÄRúËÄRùËÄRïÌÄRĞÊÄQ‡ÌÆS(                                    ÿÿ Ì¿MÍÃP3ÊÃQHËÄSJÊÆT:ÌÄUÕÕU                        ÕÕUÌÄUÊÆT:ËÄSJÊÃQHÍÃP3Ì¿Mÿÿ                                                                                                                                                                                                                                                                                     (   (   P                                                                                      ÿÿ ÿÿ €€ ÿÿ                 ÿ  €€ ÿÿ ÿÿ                                                                                                     ÿÿ ÿªUÿÿ             ¶¶$¶¶UÆ½UÆ½U¶¶U¶¶$            ÿÿ ÿªUÿÿ                                                                                 ÿÿ ÿÿ             ËÃK"ÏÈSJÌÆPoÊÄQ‹ÉÃQÊÃR¥ÊÃR¥ÉÃQÊÂQ‹ÌÆPoÏÈSJË¼K"            ÿ€ ÿÿ                                                                                ÌÌ3ÉÃJ&ÌÃOZÌÂQ—ËÄSÌÌÅQîÍÆRÿÕÍUÿÙÑWÿÙÑWÿÕÍUÿÍÅRÿÌÅQîËÄSÌÌÃR–ËÆPYÉÃJ&ÌÌ3                                                                                    ¼¼CËÅMSËÄP¬ÊÃQíÍÆSÿÍÆSÿËÄQÿËÄQıËÄQûËÄRùËÄRùËÄQûËÄQıËÄQÿÍÆSÿÍÆSÿÊÅQìËÃQ«ËÂMS¼ÉC                                                                ÿÿ  ÿ     ÇÁK)ËÄP’ÊÄQâÍÅQûËÄQşÌÅRÿËÅRÿÌÃQÿÊÄPèËÄQÄËÃP¯ËÃP¯ËÄQÄÊÄPèÌÃQÿËÄRÿÌÅRÿËÄQşÌÅQûËÄRáÌÅQ‘ÌÆS(    ÿÿ ÿÿ                                             €€     ÿ€ ËÃODÊÃR²ËÄQñÑÊTÿÍÆRÿÍÆSıÌÅRÿËÃQâÌÅP’ËÅQOÊÅP0Æ¿N$Æ¿N$ÊÅP0ËÅQOÊÃQ”ËÃRãÌÅRÿÍÆSıÌÆRÿÑÊTÿËÄQñËÄQ±ÎÂLCÿ      €€                                            Ì™3ËÄRNËÃQ¿ËÄRÿĞÉTÿËÄQûÍÇRùÍÅRşËÄRÙÊÁNoÎÅR                        Á¹M!ÊÃPoÊÃRÚÍÅRşÍÇRùËÄQûĞÉTÿÌÅQşÌÄR¾ËÄRNÌÌ3                                           ªª ÍÃMLËÄRÄÏÇSÿËÄQûËÄQûÉÂQûÑÉSÿÊÃQåÊÁQt¿¿@    ªª ¿¿@¿¿@¿¿@¿¿@ªª     Û¶IÌÄQtËÃQåÑÊSÿÉÂQûËÄQûËÄQûÏÇSÿËÄRÄÍÃMLªª                             ÿÿ         ÄÀK=ËÅQÁÍÆSÿËÄQûËÄQşËÄQıËÄRıËÃRüÊÄQ£Å¹Q   ÿÿ                       ÿÿ    ÑÅQÊÄQ¤ËÅRüËÄRıËÄQıËÄQşËÄQûÍÆSÿËÅQÀÈÄM<        ÿÿ                         ÏÁS%ËÄQ°ÊÃRúÍÆRÿÊÃRüËÄQıËÄRüÒËTşËÃQÖÊÂP\        ÿÿ                         ÿÿ         ÈÅR]ËÅQ×ÑËSşËÄRüËÄQıÊÃRüÍÆRÿÊÃRúÌÅR¯ÏÁS%                    €€     Å¹QËÅO„ËÄQòÒËTÿËÄQğÌÄRÛËÄRİËÄRùÖÏUşËÃR«Æ¿M(                                                ÇÁQ)ËÄS­×ÏVşËÄRùËÄRİÌÄRÛËÄQğÒËTÿËÄQòËÅO„Å¹Q    €€         ÿÿ ÌÌ3ÊÄQRÊÅPßÌÄQşÕÌUÿËÃP¼ËÃP‰ÊÄRÎËÄRùÑÊSÿÊÃPŒÌ³M
+ÿÿ                                         ÿÿ ¹¹FËÃQÑÊTÿËÄRùËÅRÍËÃP‰ÍÃP¼ÕÌUÿÌÄQşÊÅPßÊÄQRÌÌ3ÿÿ     ÿÿ     Ê¾M+ÊÃP¥ÍÇRÿÍÆRÿÉÂPîÈÁPfÌÁPFËÃQÜËÄRıÊÃQûÉÁQw    ÿÿ                                         ÿÿ     ÊÆOxÉÂQüËÄRıËÄPÛÌÁLFËÁPfÉÂPîÍÆRÿÍÇRÿÊÃP¥Ê¾M+    ÿÿ    ÿÿ ÊÃPoËÄQèÍÆRıÎÇSıËÃPœ½½LÍÅQBÊÃQéËÄRÿËÄQğËÃQk                                                      ÉÅPmËÄQñËÄRÿÌÃQéÍÅQB½½LËÃPœÎÇSıÍÆRıËÄQèÊÃPoÿÿ        ĞÃQ&ÌÅP¯ÕÎUşÊÃRüÊÃQÙÈÁOJ    ÊÃOMÊÄQèËÄRÿËÃQïÊÃMj                           ÿÿ €€                   ÌÃOjËÄQïËÄRÿËÄQèÍÃQL    ÈÁOJÊÃQÙÊÃRüÕÎUşÌÅP¯Ë¾N'        ÉÁQ_ËÃQà×ÏWÿËÅQõËÄQÄÄE    ÉÃMLÊÃQãËÄRşÊÃQõÉÂOq    €€                                 ¿¿@ÿÿ ÿÿ     ËÄQqËÄQõËÄQşÊÃQâËÄOJ    ÄÄEËÄQËÅQõ×ÏWÿËÄQàËÃQ^    ÃÃKÊÃQ”ĞÉSùÏÇSÿËÅRİÈÄQEÌÌ3    ÊÂM?ËÅR×ËÄRıÌÅRüÊÂO~ªª                        ÌÆO-ÉÄN4ÑÑF        ÿÿUÌÌ3ËÅRÍÆSüËÄRıÊÄR×ÊÅN>    ÌÌ3ÈÄQEËÅRİÏÇSÿĞÉSùÌÅR’Ï¿PÊÂQ?ÊÅP¸ÚÒWÿÊÂQøÌÄR®Ê¿J        ÍÈS.ËÄQÃËÄRúÓÌUÿÍÄR“ÃÃK                ÿÿ Í¿N$ËÅSÎÇR²ËÆOkÇ¿H         ÛÛ7ÊÃP–ÔÍVÿËÄRúËÄQÃÍÈS.        Ê¿JÌÄR®ÊÂQøÚÑWÿÊÃP¸ÊÂQ?ËÂRvÌÄQĞáÙZşÌÅRäËÅPvÕª+        Å½JÊÁP¥ËÄPøÛÓXşËÄS°ÆÁO-        ªªU    ÑÑFÌÅRmÊÃQòÖÎVÿÌÄRêËÄP£ÊÆQ?¶¶IÌÆJ-ÊÃP³ÛÓXşËÄPøËÄP£ÌÄM        Õª+ËÅPvÌÅRäáÙZşÌÄQĞÉÂRvËÃQªËÃRáàØYşÊÂPÒÈÁPF            Ï¿PÉÁQ{ËÃRôÚÒWşÌÅPÎÊÄOW        ÌÌ3    ÅÅQËÃPÊÃPûÒËTÿÊÄQûÌÅRùÊÄQÓËÂOzÌÃP|ËÄPÏÛÓXşËÄRôÉÂOzÏ¿@            ÈÁPFÊÂPÒàØYşÌÅRàÊÄQ©ÌÄQĞÊÄRíÚÒWşÊÂQ¼ÁºL%            ÿÿ€ÍÃQLÊÄRäÒËUÿÈÁPòÊÂO‹Ì™3    ÿÿ     ÕÕUÏÅP0ÌÃRƒÌÄQØÏÈTÿÓËUÿËÄQşÊÃQæËÃQâËÄQñÔÍUşËÄQåÍÃQLÿÿ             ÁÁL%ÊÂQ¼ÚÒWşËÅRìËÅRÎÊÄQèÊÄQöĞÉSÿËÄP¨ÒÃK        ÿÿ     Æ¿N$ËÅRÁÌÆRùÒÊTÿÊÅQ¼ĞÉQ&        ÿÿ         ÑÅQÆÁOZËÄP¨ËÄRçÑÊTÿÕÍVÿÎÇSÿÌÅRıÍÆRüÊÃQÂÓ½I#    ÿÿ         ÒÃKËÄP¨ĞÉSÿËÅQõËÄRçËÅQõËÄQûËÄRıÌÃOšÛÛI        ÿª     ÌÌM
+ÌÃQ‡ËÃPëÛÓWşÊÄQâÊÅQn™™3    €€     €€         ÇÇK)ÊÄQ~ÊÄRÊËÄRóËÄQÿÕÍUÿËÄQğÌÃQ‡Ì³3
+    ÿª         ÛÛIÌÃOšËÄRıËÄQûËÄQõËÄRüËÄRşËÃQøËÄP’€ÿ         ÿ      ÿÿ ÌÀRAËÃQÍÔÎUÿËÄQùÊÄQ½Ë¾N'                ÿÿ ªª     ¿¿@ËÇP@ÊÂP£ËÄPå×ÎUüËÃQÌÌÀRAÿÿ     ÿ          ªÿ ËÄP’ËÃQøËÄQşËÄQûÌÅRúÌÅRıÊÄQùÊÄQ”¿¿                     ¹¹FÊÄQ”ËÅRòÑÊSşËÄRğÊÄSx¿¿@ÿ  ªªU                    ÿÿ ÑÑQÌÂOdÍÄR²ÌÂR†¹¹F                    ¿€ ÊÅP•ËÅQùÌÅRıÌÅRúÊÄQñËÅQùÍÆRıÊÅRŸ¹ÑF                        ËÃSDÉÄQÃÓÍUÿËÄQıËÃQÖËÄMI    ¿€@                           Ñ¹FÆ¿M(Ì»M                        ¹ÑFÌÅRŸÍÇRıËÄQùÊÄQñÊÃRŞËÄQñÔÍUÿÊÃQ³ÂÂR                    ÿÿ ¿¿UÊÄPyÎÇSíÌÅRÿËÄQÿÊÁQ®ËÆN1    €€ ÿÿ             ÿÿ ÿ€                                     ½ÆLÊÅQ³ÔÍUÿËÄQñÊÄRİÍÄR»ËÃQæİÖYşËÄRËÇ¾N;        ÿÿ         ÿÿ     Å¿Q,ÊÃP¥ÎÆSıÌÅQşÌÅQõËÄQ˜Ã¼K"        ÿ                  ÿÿ ¿¿@ªªU            ÿÿ         È¿M<ËÄQÌİÖYşËÄQæËÅQºÍÅR…ËÄR×àØZÿËÄQåÉÂPvªª+    UUU            ÿÿ     ËÇODÊÃQÍÌÅRıÏÈSÿËÄQîÊÃQ”Å½R                                                UUU    ªª+ÉÃOwÊÃQæàØZÿËÄQ×ÍÅO„ËÃODÊÄR»ÙÒWşÊÃQûÊÃQ¿ËÄN'    €€            ÿÿ     ¿¿ ÊÁQ[ÉÄQàÎÇSÿÍÆSÿËÄRğÊÄP ÊÄM+        ªª ÿÿ                            €€     ÌÆS(ËÄQ¿ÊÃQûÙÒWşÊÃR»ÎÂPCÄ±NÉÄQŠÎÇRõÑÊSıËÄQñÌÃQˆÂÂI    ¿€ ¿¿@¿¿@¿¿@ÕÕ+€€ ÈÈIËÃPfËÄPÒÍÆRÿÍÆSÿËÃPôÌÅP³ÈÂPSÌ³M
+        ÿÿ ¿¿@¿¿@¿¿@¿¿@¿¿@¿€     ÎÎIÍÃR‰ËÄQñÑÊTüÍÇRõËÃP‰¿¿@    ËÃL@ÉÁPËÔÍUÿËÄQüËÃQãËÅP€ÌÆM(                            ÉÁF!ÊÄO¨ËÃQøÊÃQûËÄQÿËÄQüËÄQÌÌÄR‚ËÃP@¼ÉC                            ÇÁQ)ÌÄQÌÅQãËÄQüÔÍVÿÉÂQÊÆÂM?    ÿÿ ÆÆ9	ÌÅPsÉÃQéÎÇSÿĞÉSÿÊÄQéÊÄPŸÈÅOTÏÊP0ÉÁM!ÌÄMÅÅI#ÏÅP0ËÂQOÊÂP}ËÅPÅËÄRöÍÆRÿÏÈSÿÏÈSÿÔÍUÿËÃQøËÄQÁÉÃP€ËÁRNÊ¿J0ÅÅI#ÌÄMÉÁM!ÏÊP0ÉÃNUÊÂQ ËÃRêĞÉSÿÎÇSÿÉÃQéÌÅQrªª9	ÿÿ ÿ      ÑÈIÌÃRƒËÄRíÌÅQşÍÆRÿËÄRÿËÃPëËÅPÅËÃPªËÄQ¡ËÄP­ÊÄQÇÊÄQèÌÅRÿĞÉTÿÍÆSÿËÄQûËÄQñËÄQğËÅQùÌÅRÿÏÈSÿËÄRÿËÃRçÊÄQÇËÄP­ËÄQ¡ËÃPªËÅPÅËÄPìÌÅRÿÍÆRÿÌÅQşËÄRíÌÃRƒÑÈI     ÿ            Ê¿JÉÃQwÊÄRŞÏÈSÿÎÆSÿÌÅRıËÄQûËÄQøËÄR÷ÌÄRøËÄQúËÄRÿÍÆRÿÏÈSÿÊÄQûËÄQ¿ÊÃPsÊÃPsËÄQ¿ËÄQûÏÈSÿÍÆRÿËÄRÿËÄQúÌÄRøËÄR÷ËÄQøËÄQûÌÅRıÎÆSÿÏÈSÿÊÄRŞÉÃQwÊ¿J                           ÃÃKÉÂPPÊÄQ›ËÄQ×ÌÄRùÓÌUÿÙÑWÿÚÓXÿØÑWÿÓÌTÿËÄQùÊÃQÚËÃQ«ÌÆPoÉÄN4Ì»DÌ»DÉÄN4ÌÆPoËÃQ«ÊÃQÚËÄQùÓÌTÿØÑWÿÚÓXÿÙÑWÿÓÌUÿÌÄRùËÄQ×ÊÄQ›ÉÂPPÃÃK                           ÿ          ÆÆN$ÊÁMVÎÄR}ËÄQ˜ËÃQ§ËÅQ«ÊÄR¥ÊÅP–ÊÁP|ËÅQXÏÅP0ÆÆ9	                ÆÆ9	ÏÅP0ËÅQXÊÁP|ÊÅP–ÊÄR¥ËÅQ«ËÃQ§ËÄQ˜ÎÄR}ÊÁMVÆÆN$        ÿ                             ªª ÿÿ             ÒÃ<ÊÊOÉÁM!È¿RÌ»D                ªªUÿÿ ÿÿ ªªU                Ì»DÈ¿RÉÁM!ÊÊOÒÃ<            ÿÿ ªª                                         ÿÿ ÿÿ ÿÿ                     €€ ÿÿ €€                       €€ ÿÿ €€                     ÿÿ ÿÿ ÿÿ                                                                                                                                                                                                                                                                                                                                                         (   0   `                                                                                              ÿÿ ªª ¿¿@¿¿@ÿÿ                         ÿÿ ¿¿@¿¿@ªª ÿÿ                                                                                                                        ÿÿ €€                     ÿÿ ÆÆU	¿¿U¿¿UÆÆU	ÿÿ                     €€ ÿ€                                                                                                                            ¿¿@¿¿MÍÆN$ÉÀL9ÊÃOMÉÃRZÈÁQbÈÁQbÉÃRZÊÃOMÉÀL9ÍÆN$¿¿M¿¿@                                                                                                                ÿÿ ªª            ÎÅJÍÃOQÊÅRƒÌÆQªËÄQÄÊÃQÕËÄQÜËÄQàËÄQàËÄQÜÊÃQÕËÄQÄÌÆQªÊÅRƒÌÂPPÎ½J           ªª ÿÿ                                                                                    €€         ™™3ËÅK,ËÃNbÊÃP•ÌÄR¾ÊÄQßËÄQóÌÅQÿÔÌUÿÙÑWÿÜÔXÿÜÔXÿÙÑWÿÔÌUÿÌÅQÿËÄQóÊÄQßËÄR¾ÊÃP•ÈÃNbËÅK,ÿÿ@        €€                                                                                     ÿ ÑÅQËÄPIÊÅO‘ÌÄQÕËÃQüĞÉTÿÏÈSÿÍÆRÿËÄQÿËÄQûËÄR÷ÊÄQõÊÄQõËÄR÷ËÄQûËÄQÿÍÆRÿÏÈSÿĞÉTÿÊÃQüËÅRÔÌÅPÍÆQHÑÅQ ÿ                                                                            €€         ÆÆM(ÊÄQ~ËÅQÉÊÄQğÍÆRıÌÄRÿÍÆRÿÌÆSÿÏÈRÿËÃQûËÅQàÊÅQÆÊÃR·ÊÃR·ÊÅQÆËÅQàËÃQûÏÇRÿÌÆSÿÍÆRÿËÄRÿÍÆRıÊÃQïËÄRÈÊÄQ~ÆÆM(        €€                                                        ÿÿ        ßß@ÈÄNAÊÃP•ËÄQÜÎÇSÿÒËTÿËÄRÿÌÆRûÌÅRÿÊÄQòÊÃQÇÌÅQ‘ÊÅPiÉÆPPÈÄNEÈÄNEÉÆPPÊÅPiËÂP’ËÃPÈËÅRòÌÅRÿÌÅRûÌÄRÿÒÊTÿÍÆSÿËÄPÜËÄO”ÈÀKA¿¿@       ÿÿ                                                         ³³M
+ÊÆQHÊÄS©ËÃQóÎÇSÿÊÄRüÌÅRùËÄQûÎÆSÿËÄRğÊÃP²ÍÅP`ÌÌM                        Å½RÍÃQaËÄR²ËÄRğÎÇSÿËÄQûÌÆRùËÄRüÎÇRÿËÃPóÊÄP¨ÉÆOG³³M
+                                                           ÌÌ3
+ÍÃMLÌÅP¸ÊÄRöËÄRÿÍÆSÿÊÃRüÍÆQşÍÇRıËÃRïËÃQªÊÁJ>ÌÌM
+                                ¹¹FÊÁN>ÌÃQªÌÄRïÍÆRıÍÆQşÊÃRüÍÆSÿËÄQÿËÄQõÌÃP¸ÍÃMLÌÌ3
+                                           ÿ€     ¶¶IÉÂNKËÃP²ËÄQöĞÉSÿÊÄQûÊÃQüÊÃQûÍÆRÿÍÅRıÉÂQ¹ÍÃQLªª         ÿÿ ªªUªªUªªUªªUÿÿ         ªª ÊÃOMËÃQºÍÆRıÍÆRÿÊÃQûÊÃQüÊÄQûÑÉTÿËÄQöÍÂQ±ËÄOJªÕU    ÿ€                             ÿÿ     ªª ÈÄM<ÉÁP©ËÄQùÌÆRÿÊÃQüËÄQşËÄQıÌÅQşÌÅQşÊÃRäÊÅPs¿¿@    ªªU                              ªªU    ±±;ÉÄNuËÄQåÌÅQşÌÄQşËÄQıËÄQşÊÃQüÌÅRÿÌÃQøËÃQ§ÇÇN;ªª     ÿÿ                         ÿÿ     ÆÆS(ÌÄRœÉÂPîÌÅRÿÌÅRÿËÄQüËÄRıËÄQûÒËTşËÅQöÊÄQ­ÊÅN>        ªªU                                ªªU        ÊÆM?ÉÅR¯ËÅQöÒÊTşËÄQûËÄRıËÄQüÌÅRÿÌÄRÿÉÂPîËÄRœÆÆS(    ÿÿ                 ÿ          ÎÄNÊÄOtËÄRáÒËTÿËÄRùËÃRóËÄQåËÃRçÊÃR÷ØÑVşÊÄQéÊÄPyĞÆL        €€                                 €€        ÈÈIËÅQ{ËÃQêØÑVşÊÃR÷ÊÃRçÌÄQåËÃRóËÄRùÒËTÿËÄRáÊÄOtÎÄN        ÿ          ÿÿ     ªªUÊÄOWÊÃOÇËÄQùÕÎVÿËÄQòÊÂQÁËÄR²ËÄRÓÊÄQõØÑVÿËÄPØËÅOTÆªU	                                                        ÆÆU	ÊÄPVËÃQÙØÑVÿÊÃQõÊÄQÓËÄR²ÊÂQÁËÄQòÕÎVÿËÄQùÊÃOÇÊÄOWªªU    ÿÿ            €€ ÌÆO-ËÄPœËÄRúÌÅQÿÑÉTÿÊÃPÕÌÄQhËÃQ{ÊÂQÚÊÄQùÒËTÿÊÃRÇËÂR;                                                              ÄÄO=ËÄRÈÓËTÿËÃQøÉÃPÙËÄOzÌÄQhÊÃPÕÑÉTÿÌÅQÿËÄRúËÄPœÌÆO-€€        UU     »ÌDËÄPpÊÃQÔÒËTÿĞÉSÿËÃRêËÄR“ÉÃQ&ËÃSfÊÄQèÌÅRıÍÆRıÌÄQ¹ÍÂN.    €€                                                 €€     ÅÅJ0ËÄP»ÎÇSıÌÅRıËÄQçÍÅQeĞÃQ&ËÄR“ËÃRêĞÉSÿÒËTÿÊÃQÔËÄPp»ÌD    UU €€    ËÆS1ËÄQ´ÍÆSôÏÈSıÑÊTıÉÃQ·ÈÄNAÌ³M
+ÊÃPoËÅQñÌÅRÿËÄQúËÅQ±ÌÆM(    ªªU                                                ªªU    ÍÇK)ÊÃQ³ËÄQûÌÅRÿËÅQñÊÃSoÌ³M
+ÈÄNAÊÃQ·ÑÊTıÏÈSıÍÆSôËÄQ´ËÆS1   €€ ÿÿ Æ¸GÌÂPiËÄRáÕÍUÿÌÅRúÍÄQäÉÃOwÕªUÿÿ ÉÃOwËÄQğÌÅRÿËÄQùËÄP°ËÄH'    UUU                        ÿ€ ªªU€€             UUU    ËÄH'ËÄQ±ÊÃRúÌÅRÿËÄQğÉÁOw    ÕªUÌÃOwÍÄQäÌÅRúÕÍUÿËÄRáÌÂPiÆ¸Gÿÿ     Ê¿J0ÌÄQ¤ÌÄQóÚÓWşËÃRôÊÃO®ÊÆM?    ÿÿ ÌÄOxËÄQìËÄRÿÊÃQüÉÂPµÈÈO*    ÿÿ                                     ÿ  ªª    ÿÿ     ÊÄM+ËÄRµÊÃRüÌÅRşËÂQìÈÁOx        ÎÆM?ÊÃO®ËÃRôÚÓWşÌÄQóÌÄQ¤ÎÃL/    ÿ€ ÌÃNUËÄQ×ÌÄQøÖÏVÿËÅRâÌÅPmÂÂG€€     ÊÁPoÌÄQåËÄQşÍÆRÿËÄQ¾ÇÂM2    ÿÿ                         ÌÌM
+È¶IÕª+            ÿÿ     Ä¿N4ËÄQ¿ÍÆRÿËÄRıËÃQåÊÃQn    €€ ÂÂGÌÅPmËÅRâÖÏVÿÌÄQøÊÃPØÎÂOTÿ€ Ä»MÉÅQ{ÊÃQûÌÅRşÌÅRüÊÃRÀÎÀL9ÿÿ         ÍÂR`ËÄR×ËÄRúÒËTÿËÅPËÌÄNA                          ¶¶[ÇÁOWÉÂOqÌÁLF¹¹.        ÿªU€€ ÊÂLCËÅQÍÓÌUÿËÄRúËÄR×ÊÂR`        ÿÿ ÎÀL9ÊÃRÀÌÅRüÌÅRşÊÂQûËÂRzÄ»MÍÂOGÊÄR›ÓÌUÿĞÉTÿÉÂQéËÃS”ÌÂG            ËÅQOËÃRÅËÄQöÙÒWşÌÅRÚÊÄOWß¿@        €€        ¿¿@ÆÂQ?ÊÃQ®ÑÊSÓÊÄQ±ÌÅPmÍÂN.ÿ€     €€ ËÃMYËÄQÜÙÒWşËÄQöÊÃRÅËÅQO            ÌÂGËÃS”ÉÂQéĞÉTÿÓÌUÿÊÂR›Í¾OGËÂRvËÃQ¶ÙÑVıÔÍUşËÄQÌËÄRgÌÌM
+            ÌÄQ<ËÅQ«ËÃQóİÖYşËÃRçÍÆQuÎÄN        ¿¿@        ÌÄMÌÄQ~ËÃQïÜÕYÿËÄQşÌÅRÚÌÃP•ÍÁMBÈ¶IÌ»MËÂOzÊÄQèŞÕYşËÃQóÉÃQ«ÈÄM<            ÌÌM
+ËÄRgËÄQÌÔÍUşÙÑVıËÃQ¶ËÂRvËÄQ£ËÃQÍ×ÏVşÔÌTşÊÄQ±Ç¿P@ªªU            ÉÃQ&ÉÃP‰ËÄRíŞ×YşËÄQğËÅQÉÄJ4       ÕªU        ÉÃL/ÌÃQšÌÄRùÙĞWÿËÄQşÌÅQùÌÅQñÊÄQÁÊÄOtÉÁOgÌÃP¦ËÅQîß×YşËÅRíÉÅOˆÉÃJ&            ªªUÇ¿P@ÊÄQ±ÔÌTş×ÏVşËÄQÌËÅR¢ËÃPÅÊÄQßÓËTÿÏÇRşÈÂQšÆ¿N$               È¶IÉÂOdËÄRáØÑWÿËÂPøÊÂQÊÈÅOT        ÿªU        Ê¿JÉÃQUËÃQ¡ÎÆSÚËÄRüÓÌUÿ×ÏVÿÊÄPûÊÃQÔÊÄQÆÌÄQÜËÅQõØÒVÿËÅRáËÆPcÈ¶I               Æ¿N$ÊÃR™ÏÇRşÓËTÿËÄRİÊÄQÄËÄQİËÅQìĞÉSÿÊÃR÷ËÂR…ÒÃK                  ÎÂQ?ËÃPÈĞÉSıÍÅRıÌÄRíÊÃR|Õ¿@                    ªª È¾K3ËÃRÊÂRÆËÃQîÌÄQûÌÅRÿÏÈSÿÍÆRÿËÄRÿËÄQûÏÉSşÊÃQÉÎÂQ?                  ÒÃKÉÂR…ÊÃR÷ĞÉSÿÌÄQëÊÄQÜÌÅQîËÄQöÍÆSÿËÃPëÏÄQtÿ™3           €€     Ç¿P ÊÄRŸËÄQëÏÈSşÑÉTşËÃQ«ÉÅQ9ÿÿ@                   ªª Ì¿MÈÅPFÊÄQ”ËÃQÜÌÅSÿÏÈSÿËÄQşËÅQşËÄQüËÃQïÊÄPŸÎ½J    €€            ÿ™3ËÂQuËÃPëÍÆSÿËÄQöËÅQîËÄR÷ËÄQüËÄRÿÌÃPâÌÅOjÿ      €€     €€     ¿¿@ÊÃRjËÄRÎÒËUÿÒËTÿÊÂPØÈÂPyÏ¿P    ªª         ÿ          ªÿ ÉÃL/ËÄPlÊÄQ­ÊÄRäËÄQşÔÍUÿÓÌUÿÊÂQÒÊÃRj¿ª@    €€     €€     ÿ  ÍÃOkÌÃPâËÄRÿÊÃQüÊÄQ÷ÊÃRüËÄRÿÊÃQÿËÃPŞËÃPf        ÿÿ            ÿª ÈÃP3ÊÄR¥ÏÈTıÎÇRşÍÆRõÊÂP¸ËÂP6ÿÿ                 ÿÿ €€@        ¿¿ ÊÂM?ËÆRÊÃQĞÏÇSôĞÉTùÊÃR¥ÈÃP3ÿª            ÿÿ         ËÄOgËÃPŞÊÄQÿÊÃQÿÊÃQûËÄRúËÄQşÊÃQÿÊÄQßÌÂQh        ÿÿ                ¿Ÿ@ËÆRpËÅRàËÄRúÔÍUşËÄQæËÅQ{ÅÅR    ÿÿ ÿÿ                         ™™3ÆÆBËÂQXÍÃP¢ËÄS¿ÌÅRjÛ¶I                ÿÿ         ÌÇQhËÄQàÊÄQÿËÄQşËÄRúÊÄRôÊÄQúÌÅRÿÊÄRæÈÄPp€ÿ€    ÿÿ         €€         ÈÈM8ÉÃP¥ÊÃPôÖÏVÿËÄQùËÃQÉËÃPYÌÌ3    ÿÿ                ÿÿ ÿÿ         ÄÄNÅ¼L9ÊÀOMËÄN'                    ÿÿ     ªªUÊÆPoÊÃRçÌÅRÿËÄQúËÄRôÊÄRçËÅQñÎÇSÿÊÄRòÊÄR}³ÌM
+                       ÿÿ ÌÌDÍÄQ[ÊÄO×ĞÉSşÍÅQşÌÃRúÌÄQ¤ÇÃO7€€     ÿÿ                     €€ ªªU                ÿÿ                         ¹ÑFÊÄR}ÊÄRòÎÇSÿËÅQñÊÄRçËÄQÏÊÃRäÑÊTÿÍÆSıËÄP“ÌÄM                        €€     ÎÅRÊÅP•ÊÄQçÏÈRşÎÇSÿËÃQæÊÃP–ÏÁL%    ÿÿ ÿÿ                                                                     ÕÌMËÄO”ÍÆSıÑÊTÿÊÅRãËÅRÎËÄQ­ËÄQÒ×ĞWıÒËTÿÌÅR¯ÊÁN>ªª ÿÿ €€             ÿÿ     ¿¿@ÉÁMBÉÂP°ÍÆRûÍÆRşÎÆSıÊÅQßËÃPËÃS"        ÿÿ ÿÿ                 ÿÿ ÿÿ ªªUÿÿ                 €€ ÿÿ ªª ÊÂM?ËÄQ°ÒËTÿ×ĞWıËÄRÑËÄP¬ÌÄR}ÊÃR»×ĞWÿÔÍTşÊÄQÒÈÄRp±±;    ªªU                        ªÆ9	ÍÅP`ÊÂRÎÊÃQüÑÉSÿËÅRıÊÃQÙËÅQ{ÎÎRÿÿ                                                         ªªU    ±±;ÉÄQqÊÃQÓÔÌTşØĞWÿËÄQºÌÃP|ÑÆTCÊÃP™ĞÊTÿÏÈSşÊÃQõÊÃQ®ËÅK,    ¿¿@ÿÿ             ÿÿ         ÊÊUÊÁPoÊÄPŞÑÉSÿÍÆRÿÌÅRıËÅRÛÌÆO‹ÊÄM+        ªª €€@ÿÿ                                 ÿÿ ¿¿@    ÌÁO-ÌÃQ®ÉÂQöÏÈSşÑÊTÿËÃQ˜ÑÅQB×ÉQÊÃPoÌÅQîÌÅRıĞÉSÿËÄQàÌÃOwÌÂR        ÿÿ ªªUÿªU¿¿@¿¿@ÌÌ3ÿÿ ÉÁM!ÌÆR}ÊÄQÏËÄQùÎÆRÿÌÆRÿÌÅPáÊÃP–ÇÀMIÆ¸U            ÿÿ ªªUªªUªªUªªUÿªUªªUÿÿ         ÌÂRÌÄQxËÃQàĞÉSÿÌÅRıÌÄQîÌÅQn×ÉQ    ÎÁR>ÌÃP¸ËÃQøÕÎUÿËÄRùÍÄQÊÊÅPiÂÎIÿÿ                                 ÏÁL%ÍÄPËÄQìÌÄRıËÄRıÌÅRÿËÄQòÊÂO·ËÄRcĞÃQ&ÑÑFUU                                 ÿÿ ÂÂUÌÅPiÍÄRËËÄQùÕÎUÿËÃQøËÃQ·ÍÄO=        Ï¿PÌÅNiÊÃRŞĞÉTÿËÄRüÌÅRùÊÅRÎÉÅP€ËÆN1™™3                        ¿Ÿ@ÍÂN.ÍÄOŠÌÄPáËÄQıÌÅRıËÄQıËÄQüËÅRöËÄQÜËÅQ¦ÉÄRgÅÅJ0Ñ¹F                        ¿¿@ÆÆN1ÊÄQËÄQÏÌÅRùÌÅQûĞÉTÿËÄRİÌÄNhÌÌD    ÿÿ     ÏÁL%ËÄP’ÊÄQèÒËTÿÑÊTÿËÅQùËÅQÙËÄQ¡ÌÅQrËÅOTÍÅQBÌÈQ<ÊÂQ?ÌÂNKÊÂP`ÊÄR}ÌÂPŸËÄPÈËÃPëËÄRıĞÈSÿÒËTÿÓÌTÿÖÎVÿÒÊTÿËÄQïÊÄRËÊÄP£ÌÃP|ÌÁQ_ÌÅNKÊÂQ?ÌÈQ<ÍÅQBËÅOTÊÃPsËÅP¢ËÄPÛËÅQùÑÊSÿÒËTÿÊÄQèËÄP’ÍÆN$    ÿÿ ÿÿ     ÿª ÍÈM8ÊÂQ›ÊÄQìÍÆRıÍÆRÿĞÈSÿÌÄQÿÌÄQéÊÄPËËÅR´ËÅR«ËÄQ°ËÃQÀËÄR×ËÅRğĞÉSÿÔÌUÿĞÉSÿÍÆSÿËÄQõÊÄQéÊÃQéËÄQòËÅRşÎÇSÿÒËTÿÏÇSÿËÅRğËÄR×ËÃQÀËÄQ°ËÅR«ËÅR´ÊÄPËËÃQêÍÅQÿĞÈSÿÍÆRÿÍÆRıÊÄQìÊÂQ›ÍÈM8ÿª    ÿÿ             ¿¿@ÈÃK3ÊÄQ‹ÊÄQßÏÈSÿĞÉSÿÎÇSÿËÄQıÌÄQøËÄRôËÄRòËÄRóËÄRöËÃQúËÄQÿÏÈSÿÒËUÿĞÉTÿÊÅRğÊÃP³ÉÃO{ÉÁO{ËÄP²ÊÅRğÑÊTÿÒËUÿÏÈSÿËÄQÿËÃQúËÄRöËÄRóËÄRòËÄRôÌÄQøËÄQıÎÇSÿĞÉSÿÏÈSÿÊÄQßÊÄQ‹ÈÃK3¿¿@                           €€ ÇÇQ)ÉÀQrÊÄR®ÊÄQ×ÌÄRôÏÈSÿ×ĞWÿÜÔXÿİÕYÿİÕXÿÚÒWÿÓÍUÿËÄQÿËÃQëÌÅQÒËÄQ°ËÃP€ÆÂOGÌÄMÌÄMÆÂOGËÅPÌÃP¯ËÄQÒËÄQëËÄQÿÓÍUÿÚÒWÿİÕXÿİÕYÿÜÔXÿ×ĞWÿÏÈSÿËÄRôÊÄQ×ÊÄR®ÉÀQrÇÇQ)€€                            ÿÿ         ¿¿@ÌÄQ<ÉÄOzÌÃR«ÊÂQÊËÅR×ËÃPáÊÃQäËÄPâËÄQÜÌÅQĞËÄQ¾ËÃQËÄQqÊÁN>İ»D                İ»DÊÁN>ÉÃQrËÃQËÄQ¾ÌÅQĞËÄQÜËÄPâÊÃQäËÃPáËÅR×ÊÂQÊÌÃR«ÉÄOzÌÄQ<¿¿@        ÿÿ                                         ¿¿@Ò´<ÉÃJ&Ê¾M?ËÂOTËÄPcÌÂPiËÆPfÉÆRZÊÆQHÍÃP3ÊÁFÈÈI¿¿@                        ¿¿@ÈÈIÊÁFÍÃP3ÊÆQHÉÆRZËÆPfÌÂPiËÄPcËÂOTÊ¾M?ÉÃJ&Ò´<¿¿@                                                €€                     Õª+ÄÄNÏ¿PÈÈIÆÆU	                       ÿÿ €€ €€ ÿÿ                        ÆÆU	ÈÈIÏ¿PÄÄNÕª+                    €€                                                 €€ ¿¿@ÿÿU€€                     ÿÿ ªªU¿¿@ÿªU€€                         €€ ÿªU¿¿@ªªUÿÿ                     €€ ÿÿU¿¿@€€                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       MZ       ÿÿ  ¸       @                                   Ø   º ´	Í!¸LÍ!This program cannot be run in DOS mode.
+$       ­1éPfÒéPfÒéPfÒ*_9ÒëPfÒéPgÒLPfÒ*_;ÒæPfÒ½sVÒãPfÒ.V`ÒèPfÒRichéPfÒ                        PE  L <íoZ        à   h   Ø    3      €    @                     `    !J   @…                           †       P @         Ğu ¨                                                           €  °                          .text   'f      h                    `.rdata  š   €      l              @  @.data   ø¯         ‚              @  À.ndata      P                     €  À.rsrc   @  P    ˆ              @  @                                                                                                                                                                                                                                                                                                                                                                        U‹ìƒì\ƒ}t+ƒ}F‹EuƒH‹èNC ‰HPÿuÿuÿuÿ‚@ éB  SV‹5ôNC E¤WPÿuÿ ‚@ ƒeô ‰EEäPÿuÿ$‚@ ‹}ğƒeğ ‹\€@ é€   ¶FR¶VV¯Uè‹Ï+Mè¯ÁÂ‰M™÷ÿ3ÒŠğ¶FQ¯Á¶NU¯MèÁ‹Ê™÷ÿ¶VT¯UèŠÈ¶FP¯EÂ™÷ÿÁá¶ÀÈEôP‰Møÿd€@ ƒEğ‰EPEäPÿuÿ(‚@ ÿuÿÓƒEè9}èŒwÿÿÿƒ~Xÿteÿv4ÿT€@ …À‰EtU‹}jWÇEä   ÇEè   ÿP€@ ÿvXWÿX€@ ÿu‹5L€@ WÿÖ‰EEäh   Pjÿhà>C Wÿ,‚@ ÿuWÿÖÿuÿÓE¤Pÿuÿ„‚@ _^3À[ÉÂ ‹L$¡(OC ‹ÑSiÒ  VW‹TöÂtOq3ÿ;5,OC sB‹ÎiÉ  D‹öÁtGëöÁt	‹ÏO…Ét ëöÁu‹Ù3Úƒã3Ù‰F  ;5,OC rÊ_^[Â U‹ìQQ‹USV‹òiö  ‹(OC 3ÉóW‰Mü‰Mø‹F¨t9Mt$¾B‰F;,OC sD‹ÂiÀ  |B‹öÁt
+jRè¥ÿÿÿ‹öÁu(öÁ@tÿEüöÁtÿEüëÿEø;,OC ‹Ğr¼3À_^[ÉÂ ƒ}ü tóƒ}ø tƒN@ëç‹N€áƒÉ‰NëÙ‹L$¡(OC V3öƒù s495,OC v,PW‹¨u3ÿGÓç…zütë$ş‰FÂ  ;5,OC rÙ_^Â U‹ìƒì¡ôNC ƒeü SV”   W‹=,OC ‰Eø‹Eø3Û9tK;ßsE‹5(OC ƒÆ‹öÂu(‹E…Àtƒ<˜ t‹Mü3À@ƒâÓà‹Nü#È‹Á‹MüÓâ;ÂuCÆ  ;ßrÆ;ßtÿEüƒEøƒ}ü rŸ‹Eü_^[ÉÂ ‹D$…À}@¹ PC Áà+ÈQè”N  Â V‹t$ëj‹Æ‹0OC kÀÁƒ8t\PèŒ   =ÿÿÿtUPè¸ÿÿÿ…Àu@FëH‹Î‹ğ+Áƒ|$ t/Ì>C j ÿ5´>C h0u  ÿ5Ì>C ÿT@ Ph  ÿt$ÿ‚@ …ö}’3À^Â ¸ÿÿÿëõ‹D$‹ôNC j ÿtlèiÿÿÿÂ hĞ­@ ÿt$èñ>  Â U‹ììÔ  SV‹uW¡èNC jY}Ôó¥‹MÜ‹UÔ¿ PC ‰Eø‹EØ3ÛÁáÏ‹ğ‰MôMØÁæ‰,Î@ Jş÷ƒùC‰]ü‡;  ÿ$×*@ SPèŠ>  éZ  ÿ¬>C 9]ø„K  Sÿ”‚@ é?  Pè¯şÿÿHSPèÃşÿÿé  SPèP>  éî  SèB  ƒøY‰U´3À@Pÿx€@ éĞ  ÿuøÿd‚@ éÂ  Áà9]àu&‹ˆ€OC j‰ˆÀOC è  Y‰U´‹MØ‰€OC é”  ‹ˆÀOC ‰ˆ€OC éƒ  ‹Eà4…€OC 3À‹;Ë”À#Mä‹D…Ø‰ém  ‹EÜÿ4…€OC Véø  ‹°>C ‹5h‚@ ;Ët	ÿuÜQÿÖ‹EØ‹Ä>C ;Ë„+  PQÿÖé"  jğè—  ÿuÜPÿt€@ …À…	  éÊ  jğèy  P‰EèiF  ‹ğ;ótZj\VèİE  ‹ğf‹>f‰f;ûu9]àtè•B  …Àt
+ÿuèïA  ëÿuèbB  ;Ãt=·   uÿuÿ”€@ ¨uÿEüf‰>FFf;ûu¦9]Üt-jæèæıÿÿÿuh  D èpL  ÿuÿ€@ …À…j  ÿEüéb  jõéá  SèÑ  Pè‡O  é‰  jĞè¿  jß‹ğè¶  j‹øè­  WVÿ@ …Àtjãé¤  9]à„Û  VèGO  …À„Í  WVè»I  jäé  Sèo  ‹}ô‹ğEPWh   Vÿ@ …Àt$‹E;Æv'f9t"VèÿN  ;ÃtƒÀ,Pÿuè¬K  ë
+ÇEü   f‰9]à…¢  h   WWÿ¼€@ é  jÿè  MQVh   SPSÿ@ …À…n  éı  jïèŞ  PVèuF  éEşÿÿj1èË  ‰Eø‹EØÿuøƒà‰Eè|D  ÿuø¾Ğ¥@ …ÀtVèK  ëh  D VèK  PèàC  Pè!K  Vè“M  ƒ}|1Vè6N  3É;ÃtMäƒÀQPÿ@ ‹È‹EƒÀı   €#Á÷ØÀ@‰E9]uVèE  3Àƒ}•À@Ph   @VèE  ƒøÿ‰EĞur9]uOWhĞµ@ èJ  VWèˆJ  ÿuìhĞ­@ èJ  hĞµ@ WèpJ  ‹EØÁøPhĞ­@ èÅ@  ƒè„WÿÿÿHtVjúé$üÿÿÿuøjâè©:  ƒ}é4ıÿÿÿˆOC éA  ÿuøjêè‹:  ÿ´OC SSÿuĞÿuàèl  ÿ´OC ƒ}äÿ‹øuƒ}èÿtEäPEäSPÿuĞÿ@ ÿuĞÿ @ ;ûä  ƒÿşujéVèîI  ÿuøVèßI  ëjîVèÛI  h   Véæ	  Së4j1è+  ÿuØPè@  ;Ã„d  ;Eà„l  ;Eè…Œ  ‹Eìé  jğèù  ÿuÜPè{@  éo  jèä  PèmI  é*  jè°  j‰E°‰U´è£  Y‹ø‹E°Yj‰}Ì‰UĞ‰Eè®  P‰EÄè4I  9]´f‰u‰E9]„  ‹MÌ;Ë}<;ûŒ  ;ø~‹ø‹EÄxPVèåH  9]}VèğH  Ey‰]‹E=   Ï  f‰FéÆ  j è;  j1‹ğè2  9]èPVuÿ@ …Àu|‹Eàé¨  ÿ@ ëì3ÿGWè  h   VP‰Eÿ$@ …Àt9]àtVÿuÿ@ …Àu‰}üf‰f‰ş  éS  ‹uìSè¤  j‹ø‰U´è˜  Y;óY‰U´u;ø|~Šë;øs‹Eäé,  †vÿÿÿ‹Eèé  jèf  ‹øj‰U´‰}èW  Y‰U´Y‹È‹Eäƒøwsÿ$…ç+@ ùëk+ùëg¯Ïë;ËtD‹Ç™÷ù‹øëUÏë#Ïë3Ï‹ùëG3À;û”Àëå;ûuë3ÿë4;ûtø;Ëtô3ÿGë';Ët	‹Ç™÷ù‹úë3ÿÇEü   ëÓçëÓÿëÓïë‹}Wéúÿÿjèç  j‹øè¼  PWV‰U´ÿ‚@ ƒÄéN  ‹Eà‹=0Î@ ;ÃtDH;û„W  ‹?;Ãuñ;û„I  ƒÇ¾Ğ¥@ WVèG  ¡0Î@ ƒÀPWèG  ¡0Î@ VƒÀPé  9]Üt%;û„¶  GPVèÛF  ‹W£0Î@ ÿ(@ éÓ  h  j@ÿ4@ ÿuØ‹ğFPèÏF  ¡0Î@ ‰‰50Î@ é¦  jèù  j‰U´‰Eğèì  öEìY‰U´Y‰Et
+j3èù  ‰EğöEìt
+jDèé  ‰Eƒ}Ô!juLè·  j‹ø‰U´è«  Y‰U´Y‹MìÁùtUĞRQSÿuÿuğPWÿŒ‚@ ÷ØÀ@‰EüëCÿuÿuğPWÿ‚@ ë0è  j‹øè„  f‹f÷ÙÉ#Èf‹f÷ØÀQ#ÇPÿuÿuğÿt‚@ ‰EĞ9]ØŒÚ  ÿuĞézøÿÿSè&  Y‰U´Pÿl‚@ …À„ıÿÿ‹EÜé¼  jè  j‹ø‰U´èø  Y‰U´YWPÿä@ éY  ¡HOC ‹MÜS4èÕ  Y‰U´VjëPÿp‚@ éh  ÿuÜÿuøÿä@ ‹ğE¨PVÿ$‚@ ‹E´j¯EàP‹E°¯EàPSSè²  PSÿ`‚@ PShr  Vÿ‚@ ;Ã„  Pÿ\€@ é  ÿuøÿT‚@ j‹øèT  Y‹ØjHjZW‰U´ÿ`€@ PSÿT@ Wÿuø÷Ø£ĞÍ@ ÿ‚@ jè#  £àÍ@ ŠEèY‰U´ÿuÜŠÈ€áÆçÍ@ ˆäÍ@ ŠÈ€á$hìÍ@ ˆåÍ@ ¢æÍ@ è£D  hĞÍ@ ÿT€@ éI  SèĞ  j‹ğ‰U´èÄ  9]äYY‰U´PVuÿh‚@ éS  ÿ‚@ éH  Sè¾  j1‹ğèµ  j"‹Øè¬  j‹øè£  jìè~õÿÿ‹Eè‰E€‹Eø‰E„‹Eä‰E˜f‹f÷ØÀ‰]Œ#Æ‰Eˆf‹f÷ØÀÇE”  D #Ç‰E…|ÿÿÿPèÿ9  …À„œ	  öE€@„Ì  ÿu´èDH  ÿu´ëGSè5  ‹ğVjëè4  Vè‡9  ‹ğ;ó„e	  9]àt!VèH  9]Ü|PÿuôèÂB  ë;ÃtÇEü   Vÿ @ ém  jèâ  Pè˜F  ‹ø;ûtÿwÿuôè‹B  ÿwéïõÿÿ‹Eôf‰f‰éÿ  jîè®  M´‰EĞQPj	èòF  ÿĞ‹ø‹Eôf‰;ûf‰ÇEü   „  Wj@ÿ4@ ;Ã‰E„ó
+  j
+è»F  j‰EÈè±F  ÿu‰EğWSÿuĞÿUÈ…Àt4E¸PEÄPh @ ÿuÿUğ…Àt‹EÄÿpVèéA  ‹EÄÿpÿuôèÛA  ‰]üÿué¶ûÿÿ9¸OC ÇEü   Œ¹   jğèö  j‹ğèí  9]è‰EÄtVÿp@ ;Ã‰EujSVÿl@ ;Ã‰Et{ÿuÄÿuè}F  ‹ğ;ót99]à‰]ütÿuàè‡óÿÿÿÖ…Àt-ÇEü   ë$h  @ h0Î@ Wh   ÿuøÿÖƒÄë
+ÿuÄj÷èS2  9]ä…í	  ÿuèj  …À„İ	  ÿuÿh@ éÏ	  jöéN  jçéG  jğè6  jß‰E´è,  j‰EÄè"  jÍ‰Eøè  jE‰E¸è  ÿuÄ‰Eô‹Eè‹È‹ø‹ğáÿ  ÁøÁş%ÿÿ  ‰M¼ç €  ƒæ‰EÈèŸ:  …Àuj!èÏ
+  EPhØ…@ jShè…@ ÿ¨‚@ ;ÃŒ±   ‹EUĞRhø…@ ‹Pÿ;Ã‰EğŒ‡   ‹EÿuÄ‹PÿQP;û‰Eğu‹Eh  D P‹ÿQ$;ót
+‹EVP‹ÿQ<‹EÿuÈ‹PÿQ4‹M¸f9t‹Eÿu¼‹QPÿRD‹Eÿuø‹PÿQ,‹Eÿuô‹PÿQ9]ğ|‹EĞjÿu´‹PÿQ‰Eğ‹EĞP‹ÿQ‹EP‹ÿQ9]ğ}ÇEü   jğèÓñÿÿép  jôëòSèâ	  j‹ğèÙ	  j#‹øèĞ	  V‰EèƒC  …ÀuSjùèœ0  é   ‹EøV‰E˜ÇEœ   è2@  Wf‰\Fè'@  f‰\G‹Ef‹MàPS‰u ‰}¤‰E²f‰M¨èY0  E˜PÿŒ@ …À„ê  ë¡=ğ­th   jèSèë?  Pè)6  ¸ÿÿÿéÏ  ÿ”OC é¹  3ö3ÿ;ÃtSè'	  ‹ğ9]Üt	jè	  ‹ø9]èt	j"è	  ‹ØjÍè	  PSWVÿd@ éfòÿÿ¡ @ j‰Eèä  j‹øèÛ  jİ‰E´èÑ  Phÿ  EVPÿu´Wÿ`@ fƒ>
+éÃóÿÿ9]è‹uÜu+jèä  ‹ğ;ó„ä  j3è“  PVÿ €@ V‹øÿ$€@ ëj"èy  ‹MèÑùQPVè*	  ‹ø;û„æ  é§  ‹uè‹ø‹Eìj‰E´èK  j‰EÄèA  jPWÇEü   èÁ  ;Ã‰E„ª  3Àƒş¿Ğµ@ uj#è  Wèœ>  D ƒşujèÛ  Y£Ğµ@ V‰UĞXƒşuh   WSÿuäè³  PWÿu´SÿuÄÿuÿ(€@ …Àu‰]üÿuéÓ   h  èó  j3‹øèª  ;ûf‰„é  M´ÇE´   QMVQSPWÿ,€@ 3ÉA…Àu.ƒ}t9Mtƒ}u‹Eè‰Eüëtÿ63À9]èV”À‰Eüè=  ëff‰‰Müë^h  è  j‹øè  ;ûY‰U´f‰„q  9]è¹ÿ  ‰MtQVPWÿ0€@ ëSSSMSQVPWÿ€@ …ÀtÇEü   f‰ş  Wÿ$€@ éc  Vè²<  ;Ã„U  Pé×ùÿÿjíèÄ  ÿuàÿuÜPè'8  ƒøÿ„ö  PéÕïÿÿ‹Eà3Éƒú8‰E´”Á;Ã‹ùtjèl  f£Ğ­@ 3À;ûY”À‰UÄ@ëCƒú8u/j!èn  SSh   hĞ­@ jÿhĞµ@ SSÿ\@ hĞ­@ ÿP@ ëjè?  PèÈ<  Àf9‰E„u  Vèş;  }´‹ğu9]ätVVèb8  …ÀŒT  ÿuhĞ­@ Vè8  éjïÿÿj‰]øXP‰E¸èÆ  ƒøY‰U´‰EÄŒ\  ¹ÿ  ;Á~‰MÄf9„^  V‰]Ğè“;  9]Ä‰EğI  ‹=X@ ƒ}Ô9…   EÈSPjX+EäPE
+PÿuğÿH@ …À„  ‹MÈ;Ë„  f¶E
+9]ä‰M¸‰E¼…µ   E¼jPE
+QPjSÿ×…Àuh‹u¸÷ŞÿMÈ¸ıÿ  ‰E¼tYÿM¸FjSVÿuğÿD@ E¼jPE
+ÿuÈPjSÿ×…ÀtÌë-9]äu9]øuSÿuğèL7  …ÀŒ   E¼jPÿuğèØ6  …Àt}‹E¼9]äu1fƒ}Ğt;fƒ}Ğ
+t4‹Mô‹UøÿEøf;Ãf‰Q‰EĞtR‹Eø;EÄŒÿÿÿëD·ÀPÿuôè]:  é%  f9EĞtf= tf=
+ u‹Mô‹UøÿEøf‰Që‹E¸j÷ØSPÿuğÿD@ ‹Mô‹Eø;Ãf‰AéÉíÿÿf9„Ï  jè"  Y‰U´ÿuäSPVè:  PÿD@ 9]ÜŒ©  éF  Vèó9  ;Ã„–  PÿL@ éŠ  ÿuôè×9  ;Ãt,ıÿÿQPÿ<@ …ÀuGÇEü   f‰é]  jèÒ  ,ıÿÿQPÿ8@ ƒøÿu‹Eôf‰f‰ÇEü   é.  Pÿuôèa9  …XıÿÿPVé4  jğÇEĞfıÿÿè†  ‹ğV‰uÈè@3  …Àujíèp  Vè´4  jh   @VèÌ4  ƒøÿ‰E„—   ¡øNC ‹54@ Pj@‰EÄÿÖ‹ø;ûtuSè8
+  ÿuÄWè
+  ÿuàj@ÿÖ‹ğ;ó‰u´t4ÿuàVSÿuÜèá  ë‹‹FƒÆQÇVP‰MÌè4  uÌ8uäÿu´ÿ(@ ÿuÄWÿuèú4  Wÿ(@ SSÿujÿè›  ‰EĞÿuÿ @ 9]Ğjó^}jï^ÿuÈÿ@@ ÇEü   Vé£øÿÿSèq  ‹øY;=,OC ‰U´ƒËşÿÿ‹÷‹Eàiö  5(OC ;Ã|‹†uƒÆVÿuôèÔ8  éÚ   QëzƒÉÿ+È‰Màtjè   Y‰U´‰EÜëÿuèFPèÈ8  €N	‹Eà‹MÜ‰†9]ä„›   WèMçÿÿé   Sèä  ƒø Y‰U´ƒCşÿÿ9]ät%9]àtPèAèÿÿSSèçÿÿëdSè{èÿÿPÿuôè‘7  ëS9]àt‹ôNC ‹MÜ‰Œ‚”   ë<‹ôNC ÿ´”   ÿuôè>8  ë%‹HòB S#ÈQjÿuøÿ‚@ 9]ØtSSÿuøÿ‚@ ‹EüˆOC 3À_^[ÉÂ Ğ*@ ‘@ @ ¸@ Ë@ ×@ õ@ s@ £@ Á@ j@ @ B@ c@ {@ Ì@ 5@ \@ o@ @ @ A@ V@ h@ ÿ@ 0@ r@ ²@ S@ w@ @ @ ó@ @ 9@ ]@ ¹@ I@ }@ @ X@ Œ@ 1 @ !@ Y"@ İ"@ #@ N#@ #@ ä#@ „$@ ø$@ b%@ v%@ ˜%@ J&@ í'@ !(@ ;(@ h(@ ­(@ ¨)@ 5*@ Å*@ Å*@  *@ ˜%@ J&@ Ş@ â@ æ@ ë@ ø@ ü@  @ @ @ @ &@ >@ B@ F@ ‹D$‹,Î@ Vÿ4j è¨6  ‹ğVèŞ5  ·^ÃV‹t$…öW‹Æ}÷Ø‹,Î@ ‹ÈƒáÁøÿ4ŠÁàĞ¥@ Pèn6  …ö‹ø}WèÔ8  ‹Ç_^Â U‹ìEP‹E   Pj"è©ÿÿÿP¡,Î@ ÿpè   Pè{4  ÷ØÀ÷Ğ#E]Â ‹D$…À|‹„OC „  €Â U‹ìEP‹E   PÿuÿuèÍÿÿÿPèc4  ÷ØÀ÷Ğ#E]Â U‹ìV‹ufƒ> u¸ë  ë,M   EPÿuè“ÿÿÿPè€3  …ÀtÿuVPè
+   ëjX^]Â U‹ìì  SV‹uW‹şEüæ   P‹ÆƒçPÿuÿuèµ3  …Àuv‹0€@ ë…ÿuNÿu…ğıÿÿPÿuüè°ÿÿÿ…Àu…ğıÿÿh  Pj ÿuüÿÓ…ÀtÏÿuüÿ$€@ jèÕ8  …Àtj VÿuÿuÿĞëÿuüÿ$€@ ¸ë  ëÿuÿuÿ€@ _^[ÉÂ U‹ìì€   }  uj hú   jÿuÿX‚@ ÇE  }  uL‹øiA ¡*B ;È|‹ÈPjdQÿT@ PE€h @ Pÿ‚@ ƒÄE€Pÿuÿ\‚@ E€Ph  ÿuè‹*  3ÀÉÂ V3ö9t$t¡ *B ;ÆtPÿP‚@ ‰5 *B ^Ã95 *B tVè(8  ^Ãÿ|€@ ;ğNC v#Vhó-@ Vjoÿ5àNC ÿˆ‚@ jP£ *B ÿh‚@ ^ÃU‹ìƒì(SV3ÛW‰]ø‰]üÿ|€@ ¾ (D h   è  VS£ğNC ÿ„€@ jh   €Vè“.  ‹øƒÿÿ‰}ô‰= @ u
+¸è¡@ éØ  V¾ D Vèw3  Vè’,  Ph 0D èf3  SWÿ€€@ ;Ã£*B ‹ğç   »*B ¡øNC ‹ş÷ØÀ% ~     ;ğ|‹øWSèŸ  …À„"  ƒ=øNC  uzjEØSPè¼-  ‹EØ©ğÿÿÿur}Üï¾­Şui}èInstu`}äsoftuW}àNulluN	E‹E‹øiA ƒà	 OC ‹Eğ;Æ‰øNC ²   öEuöEuAÿEüpü;şv‹şëöEuj èOşÿÿY;5*B }WSÿuøèJ7  ‰Eø=øiA +÷…ö ÿÿÿ3Ûjè şÿÿ9øNC YtS9]üt"ÿ5øiA èÕ  EjPè´  …Àt4‹Eø;Eu,ÿuìj@ÿ4@ ‹ğ¡øNC ƒÀPè£  ÿuìVSjÿèf   ;Eìt¸P @ ëSjè¶ıÿÿYëïöEØ‰5ôNC ‹£üNC tÿ OC jFDYƒè0IuøjSSÿuôÿD@ ‰F<ƒÆj@Vh OC è^,  3À_^[ÉÂ U‹ìì”   SV‹uW‹}‰uø…ÿuÇEø €  ƒeü ‰}ô…ÿuÇEô ªA ‹E…À|‹XOC ÈQèê  EjPèÉ  …À„¯  öE€„P  ‹|€@ ÿÓƒ%dÓ@  ƒ%`Ó@  eÿÿÿ‰Eğ¸èé@ ÇHÎ@    £ğiA £ìiA ‹EÇèiA èiA ‰E^  ¾ @  9u}‹u¿ jA VWèO  …À„5  )u‰=8Î@ ‰5<Î@ ‹}ô‹Eøh8Î@ ‰=@Î@ £DÎ@ èá5  …À‰EìŒ£   ‹5@Î@ +÷ÿÓö´OC ‹øtI+Eğ=È   wƒ} u9‹Eÿu+EjdPÿT@ P…lÿÿÿh¢@ Pÿ‚@ ƒÄ…lÿÿÿPj è¨   ‰}ğ…öt5ƒ} uVÿuôÿuèÏ+  …Àt/uüë¡@Î@ uü)uø‰Eôƒ}ì…Eÿÿÿëqƒ} 	ÿÿÿëejüë[jşëW…ÿu>9}~T‹]ø9]‹u|‹ó¿ jA VWèE   …Àt/VWÿuèh+  …ÀtÈuü)uƒ} Ìë9u}‹uVWè   …ÀujıXë‰uü‹Eü_^[ÉÂ ÿt$ÿt$ÿ5 @ èï*  Â j j ÿt$ÿ5 @ ÿD@ Â V¾ D Vèä1  Vè–(  …Àu^ÃVè(  Vèì$  Vh D èR*  ^ÃìÔ  SVWj _3Ûh€  ‰\$ÇD$à¢@ ‰\$ÿ¨€@ ÿ¤€@ %ÿÿÿ¿f= £ìNC tSèÀ2  ;Ãth   ÿĞ¾°‚@ Vè:2  VÿP@ t€> uêj
+è“2  jèŒ2  j£äNC è€2  ;ÃtjÿĞ…Àt€ïNC @UÿD€@ Sÿ ‚@ £¸OC SD$4h´  PSh²B ÿˆ@ hÈ¢@ hà>C èZ.  ÿ €@ ½ ğC PUèH.  fƒ= ğC "ÇàNC   @ ‹Åuj"¸ğC _WPè%'  PÿH‚@ ‹È‰L$f‹f;Ã„  j [f;ÃuAAf9tùfƒ9"uAj"A[fƒ9/…¹   AAfƒ9Suf‹Af=  tf…Àu
+Ç OC    ·Â¢@ ™¤ÂÁà‹ø3ö·À¢@ ™·¼¢@ ø·¾¢@ ÁàÂ™ğ‹ú;Æu‹A;Çuf‹Af=  tf…ÀuƒL$·¶¢@ ™¤ÂÁà‹ø3ö·´¢@ ™·°¢@ ø·²¢@ ÁàÂ™ğ‹Aüú;Æu‹;ÇtSQè(&  ‹Èfƒ9"uAAf‹f…À…ÿÿÿëfƒaü ƒÁQh øC èû,  3Û‹5œ€@ ¿ D Wh   ÿÖè…ıÿÿ…ÀuVhû  Wÿ˜€@ h¤¢@ Wèâ,  èeıÿÿ…Àu6Whü  ÿÖhœ¢@ WèÆ,  ‹5p€@ Wh¢@ ÿÖWhˆ¢@ ÿÖè3ıÿÿ…À„Ë   h D ÿ@@ ÿt$è–øÿÿ;Ã‰D$…«   9 OC „   SUèV%  ‹ğ;õrL·‚¢@ ™¤ÂÁà‹Ø·€¢@ ·|¢@ ™Ø·~¢@ Á
