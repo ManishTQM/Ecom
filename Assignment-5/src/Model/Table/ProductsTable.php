@@ -50,6 +50,10 @@ class ProductsTable extends Table
             // 'bindingKey'=>'id',
             'foreignKey' => 'category_id',
         ]);
+        // $this->belongsTo('UserProfile', [
+        //     // 'bindingKey'=>'id',
+        //     'foreignKey' => 'user_id',
+        // ]);
     }
 
     /**

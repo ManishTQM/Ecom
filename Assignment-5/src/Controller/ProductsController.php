@@ -59,8 +59,19 @@ class ProductsController extends AppController
         if ($result->isValid()) {
             $result = $this->Authentication->getIdentity();
             if ($result->user_type == 0) {
-        $product=$this->paginate($this->Products->find('all')->where(['status'=>1]));
+                    // $post = $this->ProductCategories;
+                    // $this->set(compact('post'));
+                // pr($post);
+                // die;
+        // $product=$this->paginate($this->Products->find('all')->where(['status'=>1]));
+        $product = $this->paginate('Products',
+        [
+            'contain'=>['ProductCategories']
+            // 'where'=>['status'=>'1']
+        ]);
         $this->set(compact('product'));
+        // dd($product);
+        // die;
 
     }
   }
@@ -68,6 +79,36 @@ class ProductsController extends AppController
         
         return $this->redirect(['controller'=>'Users','action'=>'logout']);
     }
+}
+
+//----------------------------------------Product List---------------------------------------//
+
+public function producthome(){
+    $result = $this->Authentication->getResult();
+
+    if ($result->isValid()) {
+        $result = $this->Authentication->getIdentity();
+        if ($result->user_type == 0) {
+                // $post = $this->ProductCategories;
+                // $this->set(compact('post'));
+            // pr($post);
+            // die;
+    // $product=$this->paginate($this->Products->find('all')->where(['status'=>1]));
+    $product = $this->paginate('Products',
+    [
+        'contain'=>['ProductCategories']
+        // 'where'=>['status'=>'1']
+    ]);
+    $this->set(compact('product'));
+    // dd($product);
+    // die;
+
+}
+}
+else{
+    
+    return $this->redirect(['controller'=>'Users','action'=>'logout']);
+}
 }
 
          //----------------------------------------Product Status---------------------------------------//
@@ -118,7 +159,7 @@ class ProductsController extends AppController
     }
        
 
-             //----------------------------------------One Product View---------------------------------------//
+             //----------------------------------------One Product View & User Comment---------------------------------------//
 
     public function view($id=null,$user_id=null){
 
@@ -127,30 +168,18 @@ class ProductsController extends AppController
         $post = $this->Products->get($id, [
             'contain' => ['ProductComments'],
         ]);
-
-        // echo"<pre>";
-        // print_r($post);
-        // die;
+        $username = $this->Users->get($user_id, [
+            'contain' => ['UserProfile'],
+        ]);
         $comment = $this->ProductComments->newEmptyEntity();
         if ($this->request->is(['post'])) {
             $user_id =$user->id;
-
-            // pr($user);
-            // die;
-            
             $data=$this->request->getData();
             $comment['user_id']=$user_id;
-        //  pr($comment);
-        //     die;
+            $comment['name'] = $username->user_profile->first_name;
             $comment['product_id']= $id;
-            
             $comment = $this->ProductComments->patchEntity($comment,$data,);
-            
             if ($this->ProductComments->save($comment)) {
-                // echo"<pre>";
-                // print_r($comment);
-                // die;
-    
                 $this->Flash->success(__('The Comment has been saved.'));
     
                 return $this->redirect(['action' => 'view',$id]);
@@ -159,7 +188,6 @@ class ProductsController extends AppController
     
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
-            // $this->set(compact('comment'));  
         }
     
         $this->set(compact('post','comment','user'));  
@@ -181,7 +209,11 @@ class ProductsController extends AppController
         if ($result->isValid()) {
             $result = $this->Authentication->getIdentity();
             if ($result->user_type == 1) {
-        $productcategories = $this->paginate($this->ProductCategories);
+
+        // $productcategories = $this->paginate($this->ProductCategories)->where(['status'=>2]);
+        $productcategories=$this->paginate($this->ProductCategories->find('all')->where(['status'=>1]));
+
+
         $product = $this->Products->newEmptyEntity();
         if ($this->request->is('post')) {
             $product = $this->Products->patchEntity($product,$this->request->getData());

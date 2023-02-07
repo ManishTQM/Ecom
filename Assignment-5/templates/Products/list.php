@@ -38,14 +38,20 @@ error_reporting(0);
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('product_title') ?></th>
                     <th><?= $this->Paginator->sort('product_description') ?></th>
-                    <th><?= $this->Paginator->sort('category_id') ?></th>
+                    <th><?= $this->Paginator->sort('category_Id') ?></th>
+                    <th><?= $this->Paginator->sort('category_name') ?></th>
                     <th><?= $this->Paginator->sort('product_image') ?></th>
                     <th><?= $this->Paginator->sort('Products Details') ?></th>
 
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($product as $product): ?>
+                <?php foreach ($product as $product): 
+                    if($product->status == 2){
+                        continue;
+                    }
+                    ?>
+
                 <tr>
                     <td><?= $this->Number->format($product->id) ?></td>
                     <td><?= h($product->product_title) ?></td>
@@ -53,6 +59,8 @@ error_reporting(0);
 
                     <td><?= h($product->product_description) ?></td>
                     <td><?= h($product->category_id) ?></td>
+                    <td><?= h($product->product_category->category_name) ?></td>
+
                     <td ><?= $this->Html->image('/'.'upload/'.$product->product_image,['width'=>'100px','height'=>'100px'])?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>

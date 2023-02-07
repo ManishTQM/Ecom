@@ -27,10 +27,10 @@
             <fieldset>
                 <legend><h2 style="text-align:center;"><?= __('Add Product') ?><h2></legend>
                 <h3><?php $session = $this->request->getSession();
-echo $session->read('email');
-error_reporting(0);
+                echo $session->read('email');
+                error_reporting(0);
 
-?></h3>
+                ?></h3>
                 <?php
                     echo $this->Form->control('product_title');
                     echo $this->Form->control('product_description');

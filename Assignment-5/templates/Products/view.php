@@ -156,6 +156,7 @@
             <table>
             <tr>
                 <th>User Id</th>
+                <th>Name</th>
                 <th>Comment</th>
                 <th>Comment Time</th>
 
@@ -164,6 +165,8 @@
             <?php foreach ($post->product_comments as $posts): ?>
             <tr>                
                     <td><?= h($posts->user_id) ?></td>
+                    <td><?= h($posts->name) ?></td>
+
                     <td><?= h($posts->comments) ?></td>
                     <td><?= h($posts->created_date) ?></td>
 

@@ -30,12 +30,14 @@ class ProductComment extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
-        'product_id' => true,
-        'user_id' => true,
-        'comments' => true,
-        'created_date' => true,
-        'modified_date' => true,
-        'product' => true,
-        'user' => true,
+        // 'product_id' => true,
+        // 'user_id' => true,
+        // 'comments' => true,
+        // 'created_date' => true,
+        // 'modified_date' => true,
+        // 'product' => true,
+        // 'user' => true,
+        '*' => true,
+
     ];
 }

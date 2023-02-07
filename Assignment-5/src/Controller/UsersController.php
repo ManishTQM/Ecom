@@ -144,7 +144,7 @@ else{
                 if ($result->user_type == '1') {
                 $redirect = $this->request->getQuery('redirect', ['controller' => 'users','action' => 'index',]);
                 }else{
-                 $redirect = $this->request->getQuery('redirect', ['controller' => 'products','action' => 'list',]);
+                 $redirect = $this->request->getQuery('redirect', ['controller' => 'products','action' => 'producthome',]);
 
                 }
             }
