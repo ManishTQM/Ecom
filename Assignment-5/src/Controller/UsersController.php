@@ -11,6 +11,7 @@ use Cake\Mailer\Email;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Utility\Security;
+use App\Controller\View;
 
 /**
  * Users Controller
@@ -47,17 +48,32 @@ class UsersController extends AppController
 
             $result = $this->Authentication->getIdentity();
             if ($result->user_type == '1') {
-
-               
         $users = $this->paginate($this->Users, [
             'contain' => ['UserProfile']
         ]);
+        $status=$this->request->getQuery('status');
+        if($status == null){
+          
+             $users=$this->Users->find('all')->contain(['UserProfile']);
+        }else{
+            $users=$this->Users->find('all')->contain(['UserProfile'])->where(['status'=>$status]);
+        }
+        // $this->autoRender=false;
+        // $this->layout=false;
+        $this->set(compact('users'));
+        if($this->request->is('ajax')){
+            $this->viewBuilder()->setLayout(null);
+            echo $this->render('/element/user_index');
+            exit;
+        }
       
         $this->set(compact('users'));
-    
 }
 else{  
     return $this->redirect(['controller'=>'Products','action'=>'list']);
+   
+       
+    
 }
 }
 
@@ -132,6 +148,7 @@ else{
             $email = $this->request->getData('email');
             $users = TableRegistry::get("Users");
             $data = $users->find('all')->where(['email' => $email])->first();
+
             $session = $this->getRequest()->getSession();
             $session->write('email', $data->email);
             $result = $this->Authentication->getIdentity();

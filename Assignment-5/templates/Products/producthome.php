@@ -57,8 +57,10 @@
                               
                               <h5 class="card-title"><b>Product Description:- <?= h($product->product_description) ?> </b>
                               <br>
+                             
+
                               
-                              <a href="/products/list" class="btn btn-primary">Go somewhere</a>
+                              <a > <?= $this->Html->link(__('Product Details'), ['action' => 'view', $product->id]) ?></a>
                             </div>
                             
                           </div>

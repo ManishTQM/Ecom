@@ -1874,3 +1874,6 @@ img.formimg {
 label{
   color:black;
 }
+.select.filtr {
+  width: 176px;
+}
