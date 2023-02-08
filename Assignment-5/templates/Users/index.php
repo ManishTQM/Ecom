@@ -39,13 +39,14 @@
             </div><br>
 <div class="users index content">
     <!-- <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?> -->
-   
+                      <div class="col-2">
                         <label for="">Select Categories</label>
-                        <select name="category_id" id="selct" class="form-control">
+                        <select name="category_id" id="selct" class="form-control text-bg-dark">
                            <option value="" disabled selected>choose category</option>
                            <option value="1">Active</option>
                            <option value="2">InActive</option>
                         </select>
+  </div>
                       
                        
                    
@@ -59,10 +60,11 @@
     </div>
    
 </div>
-</div>
-</div>
+<style>
+.text-bg-dark {
+    color: #fff!important;
+     font-size: 20px;
+    background-color: RGBA(33,37,41,var(--bs-bg-opacity,1))!important;
+}
 
-
-
-
-
+</style>
