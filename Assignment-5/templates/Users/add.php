@@ -9,7 +9,7 @@
         'milligram.min',
         'cake',
         'style'
-          
+ 
 ]) ?>
          <?php echo $this->Flash->render() ?>
 <div class="row">
@@ -18,7 +18,7 @@
     
     <div class="column-responsive column-80">
         <div class="users form content">
-       <?php  echo $this->Form->create($user,['type'=>'file']);?>
+       <?php  echo $this->Form->create($user,['type'=>'file','id'=>'save']);?>
             <fieldset>
                 <legend><?= __('Add User') ?></legend>
                 <?php
@@ -44,4 +44,26 @@
     </div>
     <div>
 </div>
+<?php echo $this->Html->script('scriptvalidate',['Block'=>'script']); ?>
 
+<!-- <script>
+    $(document).ready(function(){
+        $('#save').on('submit',function(e){
+            e.preventDefault();
+
+            var formdata = new FormData(this);
+        
+            $.ajax({
+                url:'/users/add',
+                method:'POST',
+                contentType:false,
+                processData:false,
+                data:formdata,
+                success:function(){
+                    alert('data submit successfully');
+                }
+            });
+        });
+    });
+
+    </script> -->

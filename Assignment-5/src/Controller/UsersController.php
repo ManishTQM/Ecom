@@ -188,7 +188,7 @@ else{
 
         if (!$result->isValid()) {
         $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
+        if ($this->request->is('ajax')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if (!$user->getErrors) {
                 $image = $this->request->getData('user_profile.images');
