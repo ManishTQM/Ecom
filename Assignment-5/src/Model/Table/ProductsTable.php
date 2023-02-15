@@ -46,6 +46,9 @@ class ProductsTable extends Table
         $this->hasMany('ProductComments', [
             'foreignKey' => 'product_id',
         ]);
+        $this->hasMany('Reaction', [
+            'foreignKey' => 'product_id',
+        ]);
         $this->belongsTo('ProductCategories', [
             // 'bindingKey'=>'id',
             'foreignKey' => 'category_id',

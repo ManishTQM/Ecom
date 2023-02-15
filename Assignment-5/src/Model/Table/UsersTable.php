@@ -53,6 +53,9 @@ class UsersTable extends Table
         $this->hasMany('UserProfile', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('Reaction', [
+            'foreignKey' => 'user_id',
+        ]);
         $this->hasOne('UserProfile',['dependent'=>true]);
   
     }

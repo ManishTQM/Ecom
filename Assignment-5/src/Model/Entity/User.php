@@ -41,6 +41,7 @@ class User extends Entity
         'modified_date' => true,
         'product_comments' => true,
         'user_profile' => true,
+        'reaction' => true,
     ];
 
     /**

@@ -79,6 +79,7 @@ $('form').validate({
             required:true,
         },
         
+        
          
     },
         messages:{
@@ -114,15 +115,16 @@ $('form').validate({
                 // regex:"Name should be only in letter",
                 required:"Please Select Image",
                 // minlength:"Password should be at least 4 characters"
-            },             
+                         
+            }, 
          
             
     },   
     submitHandler:function(form){
-        $('#save').on('submit',function(e){
-            e.preventDefault();
+        // $('#save').on('submit',function(e){
+        //     e.preventDefault();
 
-            var formdata = new FormData(this);
+            var formdata = new FormData(form);
         
             $.ajax({
                 url:'/users/add',
@@ -132,9 +134,11 @@ $('form').validate({
                 data:formdata,
                 success:function(){
                     alert('data submit successfully');
+                    window.open('http://localhost:8765/users/login');
                 }
             });
-        });
+            return false;
+        // });
 
 
     }   

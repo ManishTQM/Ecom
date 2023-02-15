@@ -58,15 +58,74 @@
                               <h5 class="card-title"><b>Product Description:- <?= h($product->product_description) ?> </b>
                               <br>
                              
+                              <a > <?= $this->Html->link(__('Product Details'), ['action' => 'view', $product->id]) ?></a><br>
+
+                              <?php
+
+                              if(empty($product->reaction)){ ?>
 
                               
-                              <a > <?= $this->Html->link(__('Product Details'), ['action' => 'view', $product->id]) ?></a>
+                                        <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                                        <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a>
+                                        <?php
+                             }
+                             ?>
+                              <?php 
+                                 $reactionarray = array();
+                                 $a=0;$b=0;
+                                 foreach($product->reaction as $reactions ){
+                                     
+                                     $reactionarray[] =+ $reactions->user_id;  
+
+                                     $a= $a + $reactions->upvote ;
+                                     $b= $b + $reactions->downvote;
+
+
+                                 }
+                                 if (in_array($result->id, $reactionarray)){
+                                     foreach($product->reaction as $reaction ){
+                                         if($reaction->user_id == $result->id && $reaction->product_id == $product->id){
+                     
+                                     if($reaction->upvote == 1){ ?>
+
+                                        <?php  echo $a; ?>
+                                        <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id]) ?></a>
+                                        <?php  echo $b; ?>
+                                        <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a>
+                                        <?php
+                             }
+                          
+                             else if($reaction->downvote == 1){
+                              ?>
+                              <?php  echo $a; ?>
+                              <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                              <?php  echo $b; ?>
+                              <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id]) ?></a> <?php 
+                              }else{
+                                echo $a; ?>
+                              <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                              <?php  echo $b; ?>
+                              <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a> 
+
+                            <?php
+                              }
+                            
+                            }}}else{
+                        ?>
+                        <?php  echo $a; ?>
+                        <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                        <?php  echo $b; ?>
+                      <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a>
+                        <?php
+                    }?>
+                              
                             </div>
                             
                           </div>
 
                          
-                          <?php endforeach; ?>
+                          <?php 
+                              endforeach;?>
                           </div>
                           
                     </div>

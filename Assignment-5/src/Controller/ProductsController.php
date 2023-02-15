@@ -21,6 +21,7 @@ class ProductsController extends AppController
 
               
         $this->loadModel('Users');
+        $this->loadModel('Reaction');
         $this->loadModel('UserProfile');
         $this->loadModel('ProductCategories');
         $this->loadModel('Products');
@@ -96,20 +97,74 @@ public function producthome(){
     // $product=$this->paginate($this->Products->find('all')->where(['status'=>1]));
     $product = $this->paginate('Products',
     [
-        'contain'=>['ProductCategories']
+        'contain'=>['ProductCategories','Reaction']
         // 'where'=>['status'=>'1']
     ]);
-    $this->set(compact('product'));
-    // dd($product);
+    // pr($product.Reaction);
     // die;
+    $this->set(compact('product','result'));
 
-}
+
+    // $this->paginate = [
+    //     'contain' => ['Users', 'Products'],
+    // ];
+    // $reaction = $this->paginate($this->Reaction);
+
+   // $reactionarray = array();
+// foreach($product as $product){
+//     $reactionarray = array();
+//     foreach($product->reaction as $reaction ){
+        
+//         $reactionarray[] =+ $reaction->user_id;
+        
+//     }
+//     if (in_array(8, $reactionarray)){
+//     pr($reactionarray);}
+// }
+// die;
+    // dd($reactionarray);
+    
+    //-----------------------------------------------------Rule Checker-----------------------------------------------//
+
+    // foreach ($product as $product): 
+        
+        // if(empty($product->reaction)){
+        //     echo "00</br>";
+        //     break;
+        // }else{
+    //         $reactionarray = array();
+    //         foreach($product->reaction as $reactions ){
+                
+    //             $reactionarray[] =+ $reactions->user_id;  
+    //         }
+    //         if (in_array($result->id, $reactionarray)){
+    //             foreach($product->reaction as $reaction ){
+    //                 if($reaction->user_id == $result->id && $reaction->product_id == $product->id){
+
+    //             if($reaction->upvote == 1){
+    //                     echo "10</br>";
+    //                 }
+    //             else{ 
+    //                 if($reaction->downvote == 1){
+    //                     echo "01</br>";
+    //                 }else{
+    //                     echo "data not found";
+    //                 }
+    //             }
+                
+    //         }
+    //     }
+    // }
+    //     // }
+    //     break;
+    // endforeach; 
+    // die;
 }
 else{
     
     return $this->redirect(['controller'=>'Users','action'=>'logout']);
 }
-}
+}}
 
          //----------------------------------------Product Status---------------------------------------//
 
@@ -346,6 +401,150 @@ public function commentdelete($id = null)
     }
     return $this->redirect(['action' => 'postview']);
 }
+
+             //----------------------------------------Like---------------------------------------//
+
+public function like($id=null)
+{
+
+    $result = $this->Authentication->getIdentity();
+
+    $this->paginate = [
+        'contain' => ['Users', 'Products'],
+    ];
+    $reactions = $this->paginate($this->Reaction);
+        foreach($reactions as $reactions){
+            if($reactions->user_id == $result->id && $reactions->product_id == $id)
+            {
+                if($reactions->upvote == 1){
+                    $reactionadd = $this->Reaction->get($reactions->id, [
+                        'contain' => [],
+                    ]);
+                    
+                    $reactionadd = $this->Reaction->patchEntity($reactionadd, $this->request->getData());
+                    $reactionadd->upvote = 0;
+                    $reactionadd->downvote = 0;
+                    if ($this->Reaction->save($reactionadd)) {
+                        $this->Flash->success(__('The reaction has been saved.'));
+                        
+                        return $this->redirect(['action' => 'producthome']);
+                    }
+                    $this->Flash->error(__('The reaction could not be saved. Please, try again.'));
+                    
+                    break;
+
+                }
+                else{
+
+                    $reactionadd = $this->Reaction->get($reactions->id, [
+                        'contain' => [],
+                    ]);
+                    
+                    $reactionadd = $this->Reaction->patchEntity($reactionadd, $this->request->getData());
+                    $reactionadd->upvote = 1;
+                    $reactionadd->downvote = 0;
+                    if ($this->Reaction->save($reactionadd)) {
+                        $this->Flash->success(__('The reaction has been saved.'));
+                        
+                        return $this->redirect(['action' => 'producthome']);
+                    }
+                    $this->Flash->error(__('The reaction could not be saved. Please, try again.'));
+                    
+                    break;
+                }
+            }
+            
+        }
+
+
+    $reaction = $this->Reaction->newEmptyEntity();
+
+    
+    $reaction = $this->Reaction->patchEntity($reaction, $this->request->getData());
+   // dd($result->id);
+    $reaction->user_id = $result->id;
+        $reaction->product_id = $id;
+        $reaction->upvote = 1;
+        if ($this->Reaction->save($reaction)) {
+            $this->Flash->success(__('The reaction has been saved.'));
+
+            return $this->redirect(['action' => 'producthome']);
+        }
+        $this->Flash->error(__('The reaction could not be saved. Please, try again.'));
+    }
+
+
+             //----------------------------------------DisLike---------------------------------------//
+
+    public function dislike($id=null)
+{
+
+    $result = $this->Authentication->getIdentity();
+
+    $this->paginate = [
+        'contain' => ['Users', 'Products'],
+    ];
+    $reactions = $this->paginate($this->Reaction);
+   // dd($reactions);
+        foreach($reactions as $reactions){
+            if($reactions->user_id == $result->id && $reactions->product_id == $id)
+            {
+
+                if($reactions->downvote == 1){
+                    $reactionadd = $this->Reaction->get($reactions->id, [
+                        'contain' => [],
+                    ]);
+                    
+                    $reactionadd = $this->Reaction->patchEntity($reactionadd, $this->request->getData());
+                    $reactionadd->upvote = 0;
+                    $reactionadd->downvote = 0;
+                    if ($this->Reaction->save($reactionadd)) {
+                        $this->Flash->success(__('The reaction has been saved.'));
+                        
+                        return $this->redirect(['action' => 'producthome']);
+                    }
+                    $this->Flash->error(__('The reaction could not be saved. Please, try again.'));
+                    
+                    break;
+
+                }else{
+
+                    $reactionadd = $this->Reaction->get($reactions->id, [
+                        'contain' => [],
+                    ]);
+                    
+                    $reactionadd = $this->Reaction->patchEntity($reactionadd, $this->request->getData());
+                    $reactionadd->upvote = 0;
+                    $reactionadd->downvote = 1;
+                    if ($this->Reaction->save($reactionadd)) {
+                        $this->Flash->success(__('The reaction has been saved.'));
+                        
+                        return $this->redirect(['action' => 'producthome']);
+                    }
+                    $this->Flash->error(__('The reaction could not be saved. Please, try again.'));
+                    
+                    break;
+                }
+            }
+            
+        }
+
+
+    $reaction = $this->Reaction->newEmptyEntity();
+
+    
+    $reaction = $this->Reaction->patchEntity($reaction, $this->request->getData());
+   // dd($result->id);
+    $reaction->user_id = $result->id;
+        $reaction->product_id = $id;
+        $reaction->downvote = 1;
+        if ($this->Reaction->save($reaction)) {
+            $this->Flash->success(__('The reaction has been saved.'));
+
+            return $this->redirect(['action' => 'producthome']);
+        }
+        $this->Flash->error(__('The reaction could not be saved. Please, try again.'));
+    }
 
 
 
