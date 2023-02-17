@@ -402,7 +402,9 @@ public function commentdelete($id = null)
     return $this->redirect(['action' => 'postview']);
 }
 
+
              //----------------------------------------Like---------------------------------------//
+
 
 public function like($id=null)
 {
@@ -474,7 +476,7 @@ public function like($id=null)
     }
 
 
-             //----------------------------------------DisLike---------------------------------------//
+        //----------------------------------------DisLike---------------------------------------//
 
     public function dislike($id=null)
 {

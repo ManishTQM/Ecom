@@ -110,7 +110,8 @@
                             <?php
                               }
                             
-                            }}}else{
+                            }}}
+                            else{
                         ?>
                         <?php  echo $a; ?>
                         <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
