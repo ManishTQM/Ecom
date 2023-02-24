@@ -50,6 +50,9 @@ class UsersTable extends Table
         $this->hasMany('ProductCategory', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('AddCart', [
+            'foreignKey' => 'user_id',
+        ]);
         $this->hasMany('UserProfile', [
             'foreignKey' => 'user_id',
         ]);

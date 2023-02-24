@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
-use\Cake\Routing\Router;
+use Cake\Routing\Router;
 use Cake\Datasource\ConnectionManager; //Database Connection 
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
@@ -148,6 +148,8 @@ else{
             $email = $this->request->getData('email');
             $users = TableRegistry::get("Users");
             $data = $users->find('all')->where(['email' => $email])->first();
+            // pr($data);
+            // die;
 
             $session = $this->getRequest()->getSession();
             $session->write('email', $data->email);

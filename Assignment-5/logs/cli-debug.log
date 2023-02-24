@@ -748,3 +748,178 @@ Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/
 Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
 [main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
 
+2023-02-22 05:21:37 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 05:21:37 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 05:21:48 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 05:21:48 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 05:22:03 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 05:22:03 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 10:52:41 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-22 10:52:41 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-23 04:01:31 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-23 04:01:31 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-23 07:43:02 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-23 07:43:02 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-24 05:28:26 notice: `Router::connect()` is deprecated, use the non-static method `RouteBuilder::connect()` instead.
+/var/www/html/Ecom/Assignment-5/config/routes.php, line: 49
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `config/routes.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 214
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+
+2023-02-24 05:28:26 notice: `Router::scope()` is deprecated, use the non-static method `RouteBuilder::scope()` instead.
+/var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line: 220
+You can disable all deprecation warnings by setting `Error.errorLevel` to `E_ALL & ~E_USER_DEPRECATED`. Adding `vendor/cakephp/cakephp/src/Routing/Router.php` to `Error.ignoredDeprecationPaths` in your `config/app.php` config will mute deprecations from that file only.
+Trace:
+deprecationWarning /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Core/functions.php, line 323
+Cake\Routing\Router::scope() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 841
+Cake\Routing\Router::connect() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Routing/Router.php, line 220
+Cake\Http\BaseApplication::{closure}() /var/www/html/Ecom/Assignment-5/config/routes.php, line 49
+Cake\Http\BaseApplication::routes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Http/BaseApplication.php, line 200
+Cake\Console\CommandRunner::loadRoutes() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 397
+Cake\Console\CommandRunner::run() /var/www/html/Ecom/Assignment-5/vendor/cakephp/cakephp/src/Console/CommandRunner.php, line 147
+[main] /var/www/html/Ecom/Assignment-5/bin/cake.php, line 12
+

@@ -49,6 +49,9 @@ class ProductsTable extends Table
         $this->hasMany('Reaction', [
             'foreignKey' => 'product_id',
         ]);
+            $this->hasMany('AddCart', [
+                'foreignKey' => 'product_id',
+            ]);
         $this->belongsTo('ProductCategories', [
             // 'bindingKey'=>'id',
             'foreignKey' => 'category_id',

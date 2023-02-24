@@ -30,7 +30,10 @@
         error_reporting(0);
         
          ?></div><br>
-          <?= $this->Html->link(__('My Profile'), ['controller'=>'Users','action' => 'userdata',$user->users->id], ['class' => 'button float-right'] )  ?><br>
+          <?= $this->Html->link(__('My Profile'), ['controller'=>'Users','action' => 'userdata',$user->users->id], ['class' => 'button float-left'] )  ?><br>
+         
+
+         <h1> <?= $this->Html->link(__(' My Cart('.count($cart).')' ), ['controller'=>'AddCart','action' => 'index',$user->users->id], ['class' => "fas fa-shopping-cart float-right btn btn-primary",'style'=>'font-size: 15px;'] )  ?><br></h1>
           
         
             <div class="container test">
@@ -53,20 +56,22 @@
                              
                               <!-- <h5 class="card-title">Product Title</h5> -->
                               <h5 class="card-title"><b>Product Title:- </b><?= h($product->product_title) ?></h5>
+                              
                               <h5 class="card-title"><b>category Name:- </b><?= h($product->product_category->category_name) ?></h5>
                               
-                              <h5 class="card-title"><b>Product Description:- <?= h($product->product_description) ?> </b>
+                              <h5 class="card-title"><b>Product Description:- <?= h($product->product_description) ?></b>
                               <br>
-                             
-                              <a > <?= $this->Html->link(__('Product Details'), ['action' => 'view', $product->id]) ?></a><br>
+                         
+                              <a> <?= $this->Html->link(__('Product Details'), ['action' => 'view', $product->id]) ?></a>   
+                            
 
                               <?php
 
                               if(empty($product->reaction)){ ?>
 
                               
-                                        <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
-                                        <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a>
+                                        <a > <?= $this->Html->link(__(''), ['action' => 'like', $product->id],['style'=>'color:grey','class'=>'fas fa-thumbs-up']) ?></a>
+                                        <a > <?= $this->Html->link(__(''), ['action' => 'dislike', $product->id],['style'=>'color:grey','class'=>'fa-solid fa-thumbs-down']) ?></a>
                                         <?php
                              }
                              ?>
@@ -89,23 +94,23 @@
                                      if($reaction->upvote == 1){ ?>
 
                                         <?php  echo $a; ?>
-                                        <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id]) ?></a>
+                                        <a > <?= $this->Html->link(__(''), ['action' => 'like', $product->id],['class'=>'fas fa-thumbs-up']) ?></a>
                                         <?php  echo $b; ?>
-                                        <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a>
+                                        <a > <?= $this->Html->link(__(''), ['action' => 'dislike', $product->id],['style'=>'color:grey','class'=>'fa-solid fa-thumbs-down']) ?></a>
                                         <?php
                              }
                           
                              else if($reaction->downvote == 1){
                               ?>
                               <?php  echo $a; ?>
-                              <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                              <a > <?= $this->Html->link(__(''), ['action' => 'like', $product->id],['style'=>'color:grey','class'=>'fas fa-thumbs-up']) ?></a>
                               <?php  echo $b; ?>
-                              <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id]) ?></a> <?php 
+                              <a > <?= $this->Html->link(__(''), ['action' => 'dislike', $product->id],['class'=>'fa-solid fa-thumbs-down']) ?></a> <?php 
                               }else{
                                 echo $a; ?>
-                              <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                              <a > <?= $this->Html->link(__(''), ['action' => 'like', $product->id],['style'=>'color:grey','class'=>'fas fa-thumbs-up']) ?></a>
                               <?php  echo $b; ?>
-                              <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a> 
+                              <a > <?= $this->Html->link(__(''), ['action' => 'dislike', $product->id],['style'=>'color:grey','class'=>'fa-solid fa-thumbs-down']) ?></a> 
 
                             <?php
                               }
@@ -114,14 +119,15 @@
                             else{
                         ?>
                         <?php  echo $a; ?>
-                        <a > <?= $this->Html->link(__('like'), ['action' => 'like', $product->id],['style'=>'color:grey']) ?></a>
+                        <a > <?= $this->Html->link(__(''), ['action' => 'like', $product->id],['style'=>'color:grey','class'=>'fas fa-thumbs-up']) ?></a>
                         <?php  echo $b; ?>
-                      <a > <?= $this->Html->link(__('Dislike'), ['action' => 'dislike', $product->id],['style'=>'color:grey']) ?></a>
+                      <a > <?= $this->Html->link(__(''), ['action' => 'dislike', $product->id],['style'=>'color:grey','class'=>'fa-solid fa-thumbs-down']) ?></a>
                         <?php
                     }?>
                               
                             </div>
-                            
+                            <?= $this->Html->link(__('Add Product'), ['controller'=>'AddCart','action' => 'add',$product->id], ['class' => "btn btn-success"] )  ?><br><br>
+
                           </div>
 
                          

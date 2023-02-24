@@ -21,6 +21,7 @@ class ProductsController extends AppController
 
               
         $this->loadModel('Users');
+        $this->loadModel('AddCart');
         $this->loadModel('Reaction');
         $this->loadModel('UserProfile');
         $this->loadModel('ProductCategories');
@@ -97,12 +98,16 @@ public function producthome(){
     // $product=$this->paginate($this->Products->find('all')->where(['status'=>1]));
     $product = $this->paginate('Products',
     [
-        'contain'=>['ProductCategories','Reaction']
+        'contain'=>['ProductCategories','Reaction','AddCart']
         // 'where'=>['status'=>'1']
     ]);
+
+    $cart = $this->AddCart->find('all')->where(['user_id' => $result->id ])->all();
+    
+  //  dd($cart);
     // pr($product.Reaction);
     // die;
-    $this->set(compact('product','result'));
+    $this->set(compact('product','result','cart'));
 
 
     // $this->paginate = [
