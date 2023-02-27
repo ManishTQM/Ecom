@@ -53,6 +53,7 @@ class ProductsController extends AppController
         return $this->redirect(['controller'=>'Products','action'=>'list']);
     }
 }}
+
          //----------------------------------------Product List---------------------------------------//
 
     public function list(){

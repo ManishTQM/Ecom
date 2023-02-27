@@ -34,6 +34,8 @@ class AddCartController extends AppController
     public function index()
     {
         $result = $this->Authentication->getIdentity();
+        // $this->viewBuilder()->setLayout(null);
+
         // $this->paginate = [
         //     'contain' => ['Users', 'Products'],
         // ];
@@ -102,45 +104,119 @@ class AddCartController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
 
-    public function edit($id = null)
-    {
-        $addCart = $this->AddCart->get($id, [
-            'contain' => [],
-        ]);
+    // public function edit($id = null)
+    // {
+    //     $addCart = $this->AddCart->get($id, [
+    //         'contain' => [],
+    //     ]);
 
+    //         $addCart->quantity = $addCart->quantity + 1;
+            
+    //         if ($this->AddCart->save($addCart)) {
+    //             $this->Flash->success(__('The add cart has been saved.'));
+
+    //             return $this->redirect(['action' => 'index']);
+    //         }
+    //         $this->Flash->error(__('The add cart could not be saved. Please, try again.'));
+        
+        
+    // }
+    public function delete()
+    {
+
+        if($this->request->is('ajax')){
+            // dd($id);
+
+            $this->autoRender = false;
+            $id = $_GET['id'];
+            // dd($id);
+
+            $addCart = $this->AddCart->get($id);
+            
+            
+            if ($this->AddCart->delete($addCart)) {
+                echo 'delete';
+                // $this->Flash->success(__('The add cart has been saved.'));
+                
+                // return $this->redirect(['action' => 'index']);
+            }
+            else{
+                echo 'nodelete';
+            }
+            // $this->Flash->error(__('The add cart could not be saved. Please, try again.'));
+            
+            
+        }
+    }
+    public function increase()
+    {
+
+        if($this->request->is('ajax')){
+            // dd($id);
+            // $this->viewBuilder()->setLayout(false);
+
+            $this->autoRender = false;
+            $id = $_GET['id'];
+            // dd($id);
+
+            $addCart = $this->AddCart->get($id);
+            
+            // if($addCart->quantity == 1){
+            //     $this->Flash->error(__('quantity cant be less then 1 for product in cart'));
+                
+            //     return $this->redirect(['action' => 'index']);
+            // }
+        
             $addCart->quantity = $addCart->quantity + 1;
             
             if ($this->AddCart->save($addCart)) {
-                $this->Flash->success(__('The add cart has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                echo 'increased';
+                // $this->Flash->success(__('The add cart has been saved.'));
+                
+                // return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The add cart could not be saved. Please, try again.'));
-        
-        
+            else{
+                echo 'noincreased';
+            }
+            // $this->Flash->error(__('The add cart could not be saved. Please, try again.'));
+            
+            
+        }
     }
-    public function decrease($id = null)
+    public function decrease()
     {
-        $addCart = $this->AddCart->get($id, [
-            'contain' => [],
-        ]);
+
+        if($this->request->is('ajax')){
+            // dd($id);
+            $this->autoRender = false;
+            $id = $_GET['id'];
+            // dd($id);
+            
+            $addCart = $this->AddCart->get($id);
+            
+            // $this->viewBuilder()->setLayout(false);
 
             if($addCart->quantity == 1){
                 $this->Flash->error(__('quantity cant be less then 1 for product in cart'));
-
+                
                 return $this->redirect(['action' => 'index']);
             }
         
             $addCart->quantity = $addCart->quantity - 1;
             
             if ($this->AddCart->save($addCart)) {
-                $this->Flash->success(__('The add cart has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                echo 'decreased';
+                // $this->Flash->success(__('The add cart has been saved.'));
+                
+                // return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The add cart could not be saved. Please, try again.'));
-        
-        
+            else{
+                echo 'nodecreased';
+            }
+            // $this->Flash->error(__('The add cart could not be saved. Please, try again.'));
+            
+            
+        }
     }
 
     /**
@@ -150,16 +226,16 @@ class AddCartController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $addCart = $this->AddCart->get($id);
-        if ($this->AddCart->delete($addCart)) {
-            $this->Flash->success(__('The add cart has been deleted.'));
-        } else {
-            $this->Flash->error(__('The add cart could not be deleted. Please, try again.'));
-        }
+    // public function delete($id = null)
+    // {
+    //     $this->request->allowMethod(['post', 'delete']);
+    //     $addCart = $this->AddCart->get($id);
+    //     if ($this->AddCart->delete($addCart)) {
+    //         $this->Flash->success(__('The add cart has been deleted.'));
+    //     } else {
+    //         $this->Flash->error(__('The add cart could not be deleted. Please, try again.'));
+    //     }
 
-        return $this->redirect(['action' => 'index']);
-    }
+    //     return $this->redirect(['action' => 'index']);
+    // }
 }

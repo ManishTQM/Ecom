@@ -43,6 +43,7 @@
                     // echo $this->Form->control('product_category');
                     echo $this->Form->control('images',['type'=>'file']);
                     echo $this->Form->control('product_tags');
+                    echo $this->Form->control('price');
                     // echo $this->Form->control('status');
                     // echo $this->Form->control('created_date');
                     // echo $this->Form->control('modified_date', ['empty' => true]);
